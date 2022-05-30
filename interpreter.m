@@ -3,6 +3,7 @@
 #import "expr.h"
 #import "token.h"
 #import "lox.h"
+#import "environment.h"
 
 @implementation Interpreter
 - (instancetype)init {

@@ -2,6 +2,7 @@
 #import "stmt.h"
 #import "expr.h"
 #import "token.h"
+#import "environment.h"
 
 @interface Interpreter : NSObject
 
