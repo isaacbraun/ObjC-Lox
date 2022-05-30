@@ -62,7 +62,7 @@
     return KeywordTokenTypes;
 }
 
-- (NSArray *)scanTokens {
+- (NSMutableArray *)scanTokens {
     while (![self isAtEnd]) {
         _start = _current;
         [self scanToken];

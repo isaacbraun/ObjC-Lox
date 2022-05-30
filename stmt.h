@@ -6,8 +6,8 @@
 @end
 
 @interface Block : Stmt
-@property (nonatomic, strong) NSArray *statements;
-- (instancetype)initWithStatements:(NSArray *)statements;
+@property (nonatomic, strong) NSMutableArray *statements;
+- (instancetype)initWithStatements:(NSMutableArray *)statements;
 - (void)accept:(Visitor *)visitor;
 @end
 

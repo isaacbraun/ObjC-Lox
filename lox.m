@@ -56,7 +56,7 @@
     Scanner *scanner = [[Scanner alloc] init];
     scanner.source = source;
     
-    NSArray *tokens = [scanner scanTokens];
+    NSMutableArray *tokens = [scanner scanTokens];
     // Stop if there was a scanning error
     if (sizeof(tokens) == 0) { return }
 
@@ -69,7 +69,7 @@
     Parser *parser = [[Parser alloc] init];
     parser.tokens = tokens;
     
-    NSArray *statements = [parser parse];
+    NSMutableArray *statements = [parser parse];
     // Stop if there was a syntax error
     if (sizeof(statements) == 0) { return }
 

@@ -1,7 +1,7 @@
 #import "stmt.h"
 
 @implementation Block
-- (instancetype)initWithStatements:(NSArray *)statements {
+- (instancetype)initWithStatements:(NSMutableArray *)statements {
     if (self = [super init]) {
         _statements = statements;
     }

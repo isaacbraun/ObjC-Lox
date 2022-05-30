@@ -13,7 +13,7 @@
 - (instancetype)initWithSource:(NSString *)source;
 - (NSMutableDictionary *)GetLiteralTokenTypes;
 - (NSMutableDictionary *)GetKeywordTokenTypes;
-- (NSArray)scanTokens;
+- (NSMutableArray)scanTokens;
 - (void)scanToken;
 - (void)identifier;
 - (void)string;
