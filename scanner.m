@@ -1,6 +1,6 @@
-#import "scanner.h";
-#import "lox.h";
-#import "token.h";
+#import "scanner.h"
+#import "lox.h"
+#import "token.h"
 
 @implementation Scanner
 
