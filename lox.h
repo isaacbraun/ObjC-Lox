@@ -2,8 +2,8 @@
 
 @interface Lox : NSOjbect
 
-@property hadError;
-@property hadRuntimeError;
+@property (nonatomic, strong) BOOL *hadError;
+@property (nonatomic, strong) BOOL *hadRuntimeError;
 
 - (void)runFile:(NSString)path;
 - (void)runPrompt;
