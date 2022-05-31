@@ -8,7 +8,7 @@
     return self;
 }
 
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitBlock:self];
 }
 
@@ -21,7 +21,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitExpression:self];
 }
 @end
@@ -35,7 +35,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitIf:self];
 }
 @end
@@ -47,7 +47,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitPrint:self];
 }
 @end
@@ -60,7 +60,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitVar:self];
 }
 @end
@@ -73,7 +73,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitWhile:self];
 }
 @end

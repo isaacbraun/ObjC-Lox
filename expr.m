@@ -1,4 +1,6 @@
 #import "expr.h"
+#import "interpreter.h"
+#import "token.h";
 
 @implementation Assign
 - (instancetype)initWithName:(Token *)name value:(Expr *)value {
@@ -8,7 +10,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitAssign:self];
 }
 @end
@@ -22,7 +24,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitBinary:self];
 }
 @end
@@ -34,7 +36,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitGrouping:self];
 }
 @end
@@ -46,7 +48,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitLiteral:self];
 }
 @end
@@ -60,7 +62,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitLogical:self];
 }
 @end
@@ -73,7 +75,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitUnary:self];
 }
 @end
@@ -85,7 +87,7 @@
     }
     return self;
 }
-- (void)accept:(Visitor *)visitor {
+- (void)accept:(id *)visitor {
     [visitor visitVariable:self];
 }
 @end
