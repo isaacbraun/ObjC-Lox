@@ -13,7 +13,7 @@
 - (instancetype)initWithSource:(NSString *)source;
 - (NSMutableDictionary *)GetLiteralTokenTypes;
 - (NSMutableDictionary *)GetKeywordTokenTypes;
-- (NSMutableArray)scanTokens;
+- (NSMutableArray *)scanTokens;
 - (void)scanToken;
 - (void)identifier;
 - (void)string;
@@ -26,7 +26,7 @@
 - (char)peek;
 - (char)peekNext;
 - (char)advance;
-- (void)addSingleToken:(NSString)tempType;
-- (void)addToken:(NSString)tempType literal:(NSString *)literal;
+- (void)addSingleToken:(NSString *)tempType;
+- (void)addToken:(NSString *)tempType literal:(NSString *)literal;
 
 @end

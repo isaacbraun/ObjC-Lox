@@ -227,11 +227,11 @@
     return nextChar;
 }
 
-- (void)addSingleToken:(NSString)tempType {
+- (void)addSingleToken:(NSString *)tempType {
     [self addToken:tempType literal:NULL];
 }
 
-- (void)addToken:(NSString)tempType literal:(NSString *)literal {
+- (void)addToken:(NSString *)tempType literal:(NSString *)literal {
     NSString *text = [self.source substringWithRange:NSMakeRange(self.start, self.current - self.start)];
     Token *token = [[Token alloc] initWithData:tempType lexeme:text literal:literal line:self.line];
     [self.tokens addObject:token];
