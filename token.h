@@ -2,10 +2,10 @@
 
 @interface Token : NSOjbect
 
-@property NSString *token_type;
-@property NSString *lexeme;
-@property NSString *literal;
-@property int *line;
+@property(nonatomic, readwrite) NSString *token_type;
+@property(nonatomic, readwrite) NSString *lexeme;
+@property(nonatomic, readwrite) NSString *literal;
+@property(nonatomic, readwrite) int *line;
 
 - (instancetype)initWithData:(NSString)type lexeme:(NSString)lexeme literal:(NSString)literal line:(int)line;
 + (NSString)print;

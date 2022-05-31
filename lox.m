@@ -4,10 +4,11 @@
 
 @implementation Lox
 
-- (id)init {
-    self = [super init];
-    hadError = NO;
-    hadRuntimeError = NO;
+- (instancetype)init {
+    if (self = [super init]) {
+        _hadError = NO;
+        _hadRuntimeError = NO;
+    }
     return self;
 }
 

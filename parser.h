@@ -4,8 +4,8 @@
 #import "token.h"
 
 @interface Parser : NSObject
-@property (nonatomic, strong) NSMutableArray *tokens;
-@property (nonatomic, strong) NSNumber *current;
+@property(nonatomic, readwrite) NSMutableArray *tokens;
+@property(nonatomic, readwrite) NSNumber *current;
 
 - (instancetype)initWithTokens:(NSMutableArray *)tokens;
 - (NSMutableArray *)parse;

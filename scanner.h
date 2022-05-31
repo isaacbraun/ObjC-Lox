@@ -4,11 +4,11 @@
 
 @interface Scanner : NSObject
 
-@property (nonatomic, strong) NSString *source;
-@property (nonatomic, strong) NSMutableArray *tokens;
-@property (nonatomic, strong) int *start;
-@property (nonatomic, strong) int *current;
-@property (nonatomic, strong) int *line;
+@property(nonatomic, readwrite) NSString *source;
+@property(nonatomic, readwrite) NSMutableArray *tokens;
+@property(nonatomic, readwrite) int *start;
+@property(nonatomic, readwrite) int *current;
+@property(nonatomic, readwrite) int *line;
 
 - (instancetype)initWithSource:(NSString *)source;
 - (NSMutableDictionary *)GetLiteralTokenTypes;
