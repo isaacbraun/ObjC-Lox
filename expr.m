@@ -2,7 +2,7 @@
 #import "token.h"
 
 @implementation Expr
-+ (void)accept:(id *)visitor {
++ (void)accept:(id)visitor {
     // https://stackoverflow.com/questions/9366079/visitor-pattern-in-objective-c
     Class class = [visitor class];
     while (class && class != [NSObject class])
@@ -20,91 +20,97 @@
 @end
 
 @implementation Assign
-- (instancetype)initWithName:(Token *)name value:(Expr *)value {
+@synthesize name;
+@synthesize value;
+
+- (instancetype)initWithName:(Token *)param_name value:(Expr *)param_value {
     if (self = [super init]) {
-        self.name = name;
-        self.value = value;
+        self.name = param_name;
+        self.value = param_value;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitAssign:self];
-// }
+
 @end
 
 @implementation Binary
-- (instancetype)initWithLeft:(Expr *)left operator:(Token *)operator right:(Expr *)right {
+@synthesize left;
+@synthesize operator;
+@synthesize right;
+
+- (instancetype)initWithLeft:(Expr *)param_left operator:(Token *)param_operator right:(Expr *)param_right {
     if (self = [super init]) {
-        self.left = left;
-        self.operator = operator;
-        self.right = right;
+        self.left = param_left;
+        self.operator = param_operator;
+        self.right = param_right;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitBinary:self];
-// }
+
 @end
 
 @implementation Grouping
-- (instancetype)initWithExpression:(Expr *)expression {
+@synthesize expression;
+
+- (instancetype)initWithExpression:(Expr *)param_expression {
     if (self = [super init]) {
-        self.expression = expression;
+        self.expression = param_expression;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitGrouping:self];
-// }
+
 @end
 
 @implementation Literal
-- (instancetype)initWithValue:(id)value {
+@synthesize value;
+
+- (instancetype)initWithValue:(id)param_value {
     if (self = [super init]) {
-        self.value = value;
+        self.value = param_value;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitLiteral:self];
-// }
+
 @end
 
 @implementation Logical
-- (instancetype)initWithLeft:(Expr *)left operator:(Token *)operator right:(Expr *)right {
+@synthesize left;
+@synthesize operator;
+@synthesize right;
+
+- (instancetype)initWithLeft:(Expr *)param_left operator:(Token *)param_operator right:(Expr *)param_right {
     if (self = [super init]) {
-        self.left = left;
-        self.operator = operator;
-        self.right = right;
+        self.left = param_left;
+        self.operator = param_operator;
+        self.right = param_right;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitLogical:self];
-// }
+
 @end
 
 @implementation Unary
-- (instancetype)initWithOperator:(Token *)operator right:(Expr *)right {
+@synthesize operator;
+@synthesize right;
+
+- (instancetype)initWithOperator:(Token *)param_operator right:(Expr *)param_right {
     if (self = [super init]) {
-        self.operator = operator;
-        self.right = right;
+        self.operator = param_operator;
+        self.right = param_right;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitUnary:self];
-// }
+
 @end
 
 @implementation Variable
-- (instancetype)initWithName:(Token *)name {
+@synthesize name;
+
+- (instancetype)initWithName:(Token *)param_name {
     if (self = [super init]) {
-        self.name = name;
+        self.name = param_name;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitVariable:self];
-// }
+
 @end
