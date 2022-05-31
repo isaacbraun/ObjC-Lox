@@ -2,7 +2,7 @@
 
 @implementation Token
 
-- (instancetype)initWithData:(NSString)type lexeme:(NSString)lexeme literal:(NSString)literal line:(int)line {
+- (instancetype)initWithData:(NSString *)type lexeme:(NSString *)lexeme literal:(NSString *)literal line:(int)line {
     self = [super init]
     if (self) {
         _token_type = type;
@@ -13,7 +13,7 @@
     return self;
 }
 
-+ (NSString)print {
++ (NSString *)print {
     return @"%@ %@ %@", _token_type, _lexeme, _literal;
 }
 
