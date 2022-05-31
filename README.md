@@ -5,4 +5,4 @@ Objective-C Interpreter for Lox based on [Bob Nystrom's](https://github.com/muni
 book.
 
 
-gcc -o <NAME>.exe <NAME>.m -I /GNUstep/GNUstep/System/Library/Headers -L /GNUstep/GNUstep/System/Library/Libraries -std=c99 -lobjc -lgnustep-base -fconstant-string-class=NSConstantString
+gcc -o <NAME>.exe <NAME>.m -I /GNUstep/GNUstep/System/Library/Headers -L /GNUstep/GNUstep/System/Library/Libraries -std=c99 -lobjc -lgnustep-base -fconstant-string-class=NSConstantString -fobjc-exceptions
