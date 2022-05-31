@@ -7,7 +7,7 @@
 @property(nonatomic, readwrite, retain) Environment *enclosing;
 
 - (instancetype)init;
-- (instancetype)initWithEnclosing:(Environment)enclosing;
+- (instancetype)initWithEnclosing:(Environment *)enclosing;
 - (void)define:(NSString *)name value:(id)value;
 - (id)get:(Token *)name;
 - (void)assign:(Token *)name value:(id)value;

@@ -12,7 +12,7 @@
     return self;
 }
 
-- (instancetype)initWithEnclosing:(Environment)enclosing {
+- (instancetype)initWithEnclosing:(Environment *)enclosing {
     if (self = [super init]) {
         _values = [NSMutableDictionary dictionary];
         _enclosing = enclosing;
