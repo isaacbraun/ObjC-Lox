@@ -1,4 +1,6 @@
 #import "lox.h"
+#import "parser.h"
+#import "scanner.h"
 #import "interpreter.h"
 #import "token.h"
 
@@ -37,7 +39,7 @@
             NSString *input = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         
             [self run:input];
-            hadError = NO;
+            self.hadError = NO;
         }
     }
     @catch(NSException *exception) {
