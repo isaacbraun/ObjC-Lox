@@ -4,11 +4,14 @@
 #import "token.h"
 #import "environment.h"
 
-@interface Interpreter : NSObject
+@interface Interpreter : NSObject {
+    Environment *environment;
+    Lox *lox;
+}
 
-@property(nonatomic, readwrite, retain) Environment *environment;
+// @property(nonatomic, readwrite, retain) Environment *environment;
 
-- (instancetype)init;
+- (instancetype)initWithLox:(Lox *)param_lox;
 - (void)interpret:(NSMutableArray *)statements;
 - (NSString *)visitLiteral:(Expr *)expr;
 - (id)visitLogical:(Expr *)expr;

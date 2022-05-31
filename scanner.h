@@ -2,15 +2,21 @@
 #import "token.h"
 #import "lox.h"
 
-@interface Scanner : NSObject
+@interface Scanner : NSObject {
+    NSString *source;
+    NSMutableArray *tokens;
+    int current;
+    int start;
+    int line;
+}
 
-@property(nonatomic, readwrite, retain) NSString *source;
-@property(nonatomic, readwrite, retain) NSMutableArray *tokens;
-@property(nonatomic, readwrite) int *start;
-@property(nonatomic, readwrite) int *current;
-@property(nonatomic, readwrite) int *line;
+// @property(nonatomic, readwrite, retain) NSString *source;
+// @property(nonatomic, readwrite, retain) NSMutableArray *tokens;
+// @property(nonatomic, readwrite) int *start;
+// @property(nonatomic, readwrite) int *current;
+// @property(nonatomic, readwrite) int *line;
 
-- (instancetype)initWithSource:(NSString *)source;
+- (instancetype)initWithSource:(NSString *)param_source andLox:(Lox *)param_lox;
 - (NSMutableDictionary *)GetLiteralTokenTypes;
 - (NSMutableDictionary *)GetKeywordTokenTypes;
 - (NSMutableArray *)scanTokens;

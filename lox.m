@@ -9,24 +9,42 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.hadError = NO;
-        self.hadRuntimeError = NO;
+        hadError = NO;
+        hadRuntimeError = NO;
     }
     return self;
 }
+
+// - (BOOL *)hadError {
+//     return _hadError;
+// }
+
+// - (void)setHadError:(BOOL *)hadError {
+//     _hadError = hadError;
+// }
+
+// - (BOOL *)hadRuntimeError {
+//     return _hadRuntimeError;
+// }
+
+// - (void)setHadRuntimeError:(BOOL *)hadRuntimeError {
+//     _hadRuntimeError = hadRuntimeError;
+// }
 
 - (void)runFile:(NSString *)path {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     if ([fileManager fileExistsAtPath:path] == YES) {
         NSData *data = [fileManager contentsAtPath:path];
+        NSString *source = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        [self run:source];
     }
     else {
         NSLog(@"Invalid File Path");
     }
 
-    if (self.hadError) { exit(1); }
-    if (self.hadRuntimeError) { exit(1); }
+    if (hadError) { exit(1); }
+    if (hadRuntimeError) { exit(1); }
 }
 
 - (void)runPrompt {
@@ -39,7 +57,7 @@
             NSString *input = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         
             [self run:input];
-            self.hadError = NO;
+            hadError = NO;
         }
     }
     @catch(NSException *exception) {
@@ -57,12 +75,11 @@
 - (void)run:(NSString *)source {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; 
 
-    Scanner *scanner = [[Scanner alloc] init];
-    scanner.source = source;
-    
+    Scanner *scanner = [[Scanner alloc] initWithSource:source andLox:self];
     NSMutableArray *tokens = [scanner scanTokens];
+
     // Stop if there was a scanning error
-    if (sizeof(tokens) == 0) { return }
+    if (sizeof(tokens) == 0) { return; }
 
     // UNCOMMENT for loop to test scanning - COMMENT OUT interpreter function call
     // int i;
@@ -70,38 +87,39 @@
     //     NSLog(@"Token[%d]: %d\n", i, tokens[i] );
     // }
 
-    Parser *parser = [[Parser alloc] init];
-    parser.tokens = tokens;
-    
+    Parser *parser = [[Parser alloc] initWithTokens:tokens andLox:self];
     NSMutableArray *statements = [parser parse];
-    // Stop if there was a syntax error
-    if (sizeof(statements) == 0) { return }
 
-    Interpreter *interpreter = [[Interpreter alloc] init];
+    // Stop if there was a syntax error
+    if (sizeof(statements) == 0) { return; }
+
+    Interpreter *interpreter = [[Interpreter alloc] initWithLox:self];
     [interpreter interpret:statements];
 
     [pool drain];
 }
 
-+ (void)error:(NSNumber *)line message:(NSString *)message {
+- (void)error:(NSNumber *)line message:(NSString *)message {
     [self report:line where:@"" message:message];
 }
 
 // + (void)runtimeError:(Error *)error {
-//     NSLog(@"%@ \n[line %d]", [error getMessage], error.token.line);
-//     hadRuntimeError = YES;
-// }
+- (void)runtimeError:(NSNumber *)line message:(NSString *)message {
+    // NSLog(@"%@ \n[line %d]", [error getMessage], error.token.line);
+    [self report:line where:@"" message:message];
+    hadRuntimeError = YES;
+}
 
-+ (void)parserError:(Token *)token message:(NSString *)message {
+- (void)parserError:(Token *)token message:(NSString *)message {
     if (token.token_type == @"EOF") {
-        [self report:token.line where:@" at end" message:message];
+        [self report:(NSNumber *)token.line where:@" at end" message:message];
     }
     else {
-        [self report:token.line where:@" at '%@'", token.lexeme message:message];
+        [self report:(NSNumber *)token.line where:@" at '%@'", token.lexeme message:message];
     }
 }
 
-+ (void)report:(NSNumber *)line where:(NSString *)where message:(NSString *)message {
+- (void)report:(NSNumber *)line where:(NSString *)where message:(NSString *)message {
     NSLog(@"[line %@] Error %@: %@", line, where, message);
     hadError = YES;
 }
@@ -112,12 +130,14 @@ void main(int argc, const char * argv[]) {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; 
     Lox *lox = [[Lox alloc] init];
 
-    if (sizeof(argv) > 2) {
+    if (argc > 2) {
         NSLog(@"Usage: plox [script]");
-        sys.exit(64)
+        exit(64);
     }
-    else if (sizeof(args) == 2) {
-        [lox runFile:argv[1]];
+    else if (argc == 2) {
+        // [lox runFile:argv[1]];
+        // [lox runFile:[NSString stringWithUTF8String:argv[1]]];
+        NSLog(@"argc: %d. argv[1]: %c", argc, argv[1]);
     }
     else {
         [lox runPrompt];

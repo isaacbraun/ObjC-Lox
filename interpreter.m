@@ -6,9 +6,10 @@
 #import "environment.h"
 
 @implementation Interpreter
-- (instancetype)init {
+- (instancetype)initWithLox:(Lox *)param_lox {
     if (self = [super init]) {
-        self.environment = [[Environment alloc] init];
+        environment = [[Environment alloc] initWithLox:param_lox andEnclosing:nil];
+        lox = param_lox;
     }
     return self;
     
@@ -58,7 +59,7 @@
 }
 
 - (NSString *)visitVariable:(Expr *)expr {
-    return [self.environment get:expr.name];
+    return [environment get:expr.name];
 }
 
 - (id)visitGrouping:(Expr *)expr {
@@ -66,7 +67,7 @@
 }
 
 - (id)visitBlock:(Stmt *)stmt {
-    [self executeBlock:stmt.statements withEnvironment:self.environment];
+    [self executeBlock:stmt.statements withEnvironment:environment];
 }
 
 - (id)visitExpression:(Stmt *)stmt {
@@ -98,7 +99,7 @@
         value = [self evaluate:stmt.initializer];
     }
 
-    [self.environment define:stmt.name.lexeme value:value];
+    [environment define:stmt.name.lexeme value:value];
     return nil;
 }
 
@@ -112,7 +113,7 @@
 
 - (id)visitAssign:(Expr *)expr {
     id value = [self evaluate:expr.value];
-    [self.environment assign:expr.name value:value];
+    [environment assign:expr.name value:value];
     return value;
 }
 
@@ -255,17 +256,17 @@
 }
 
 - (void)executeBlock:(NSMutableArray *)statements withEnvironment:(Environment *)environment {
-    Environment *previous = self.environment;
+    Environment *previous = environment;
 
     @try {
-        self.environment = environment;
+        environment = environment;
 
         for (Stmt *stmt in statements) {
             [self execute:stmt];
         }
     }
     @finally {
-        self.environment = previous;
+        environment = previous;
     }
 }
 

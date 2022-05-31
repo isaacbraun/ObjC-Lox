@@ -5,10 +5,11 @@
 #import "lox.h"
 
 @implementation Parser
-- (instancetype)initWithTokens:(NSMutableArray *)tokens {
+- (instancetype)initWithTokens:(NSMutableArray *)param_tokens andLox:(Lox *)param_lox {
     if (self = [super init]) {
-        self.tokens = tokens;
-        self.current = 0;
+        tokens = param_tokens;
+        current = 0;
+        lox = param_lox;
     }
     return self;
 }
@@ -181,7 +182,7 @@
             return [[Assign alloc] initWithName:name value:value];
         }
         else {
-            [Lox error:equals message:@"Invalid assignment target."];
+            [lox error:equals message:@"Invalid assignment target."];
         }
     }
 
@@ -292,7 +293,7 @@
         return [[Grouping alloc] initWithExpression:expr];
     }
     else {
-        [Lox error:[self peek] message:@"Expect expression."];
+        [lox error:[self peek] message:@"Expect expression."];
         return nil;
     }
 }
@@ -313,7 +314,7 @@
         return [self advance];
     }
     else {
-        [Lox error:[self peek] message:message];
+        [lox error:[self peek] message:message];
         return nil;
     }
 }
@@ -328,7 +329,7 @@
 
 - (Token *)advance {
     if (![self isAtEnd]) {
-        self.current++;
+        current++;
     }
     return [self previous];
 }
@@ -338,11 +339,11 @@
 }
 
 - (Token *)peek {
-    return [self.tokens objectAtIndex:self.current];
+    return [tokens objectAtIndex:current];
 }
 
 - (Token *)previous {
-    return [self.tokens objectAtIndex:self.current - 1];
+    return [tokens objectAtIndex:current - 1];
 }
 
 - (void)synchronize {

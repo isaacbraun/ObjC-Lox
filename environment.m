@@ -4,18 +4,14 @@
 
 @implementation Environment
 
-- (instancetype)init {
-    if (self = [super init]) {
-        self.values = [NSMutableDictionary dictionary];
-        self.enclosing = nil;
-    }
-    return self;
-}
+@synthesize values;
+@synthesize enclosing;
 
-- (instancetype)initWithEnclosing:(Environment *)enclosing {
+- (instancetype)initWithLox:(Lox *)param_lox andEnclosing:(Environment *)param_enclosing {
     if (self = [super init]) {
         self.values = [NSMutableDictionary dictionary];
-        self.enclosing = enclosing;
+        self.enclosing = param_enclosing;
+        lox = param_lox;
     }
     return self;
 }
@@ -33,7 +29,7 @@
         return [self.enclosing get:name];
     }
 
-    [Lox runtimeError:name.line message:[NSString stringWithFormat:@"Undefined variable '%@'.", name.lexeme]];
+    [lox runtimeError:name.line message:[NSString stringWithFormat:@"Undefined variable '%@'.", name.lexeme]];
     return nil;
 }
 
@@ -48,7 +44,7 @@
         return;
     }
     
-    [Lox runtimeError:name.line message:[NSString stringWithFormat:@"Undefined variable '%@'.", name.lexeme]];
+    [lox runtimeError:name.line message:[NSString stringWithFormat:@"Undefined variable '%@'.", name.lexeme]];
 }
 
 @end

@@ -3,11 +3,15 @@
 #import "stmt.h"
 #import "token.h"
 
-@interface Parser : NSObject
-@property(nonatomic, readwrite, retain) NSMutableArray *tokens;
-@property(nonatomic, readwrite, retain) NSNumber *current;
+@interface Parser : NSObject {
+    NSMutableArray *tokens;
+    int current;
+}
 
-- (instancetype)initWithTokens:(NSMutableArray *)tokens;
+// @property(nonatomic, readwrite, retain) NSMutableArray *tokens;
+// @property(nonatomic, readwrite, retain) NSNumber *current;
+
+- (instancetype)initWithTokens:(NSMutableArray *)param_tokens andLox:(Lox *)param_lox;
 - (NSMutableArray *)parse;
 - (Stmt *)declaration;
 - (Stmt *)statement;

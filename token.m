@@ -2,19 +2,24 @@
 
 @implementation Token
 
-- (instancetype)initWithData:(NSString *)type lexeme:(NSString *)lexeme literal:(NSString *)literal line:(int)line {
-    self = [super init]
+@synthesize token_type;
+@synthesize lexeme;
+@synthesize literal;
+@synthesize line;
+
+- (instancetype)initWithData:(NSString *)param_type lexeme:(NSString *)param_lexeme literal:(NSString *)param_literal line:(int)param_line {
+    self = [super init];
     if (self) {
-        self.token_type = type;
-        self.lexeme = lexeme;
-        self.literal = literal;
-        self.line = line;
+        self.token_type = param_type;
+        self.lexeme = param_lexeme;
+        self.literal = param_literal;
+        self.line = param_line;
     }
     return self;
 }
 
-+ (NSString *)print {
-    return @"%@ %@ %@", self.token_type, self.lexeme, self.literal;
+- (NSString *)print {
+    return @"%@ %@ %@", token_type, lexeme, literal;
 }
 
 @end
