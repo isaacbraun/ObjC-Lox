@@ -5,9 +5,10 @@
 @implementation Lox
 
 - (instancetype)init {
-    if (self = [super init]) {
-        _hadError = NO;
-        _hadRuntimeError = NO;
+    self = [super init];
+    if (self) {
+        self.hadError = NO;
+        self.hadRuntimeError = NO;
     }
     return self;
 }
@@ -22,8 +23,8 @@
         NSLog(@"Invalid File Path");
     }
 
-    if (hadError) { exit(1) }
-    if (hadRuntimeError) { exit(1) }
+    if (self.hadError) { exit(1); }
+    if (self.hadRuntimeError) { exit(1); }
 }
 
 - (void)runPrompt {

@@ -7,11 +7,11 @@
 - (instancetype)initWithSource:(NSString *)source {
     self = [super init];
     if (self) {
-        _source = source;
-        _tokens = [[NSMutableArray alloc] init];
-        _start = 0;
-        _current = 0;
-        _line = 1;        
+        self.source = source;
+        self.tokens = [[NSMutableArray alloc] init];
+        self.start = 0;
+        self.current = 0;
+        self.line = 1;        
     }
     return self;
 }
@@ -64,15 +64,15 @@
 
 - (NSMutableArray *)scanTokens {
     while (![self isAtEnd]) {
-        _start = _current;
+        self.start = self.current;
         [self scanToken];
     }
 
     // Append EOF token to the end of the token array
-    Token *eof = [[Token alloc] initWithData:@"EOF" lexeme:@"" literal:NULL line:_line];
-    [_tokens addObject:eof];
+    Token *eof = [[Token alloc] initWithData:@"EOF" lexeme:@"" literal:NULL line:self.line];
+    [self.tokens addObject:eof];
 
-    return _tokens;
+    return self.tokens;
 }
 
 - (void)scanToken {
@@ -80,7 +80,7 @@
 
     // Check for newline char
     if (c == '\n') {
-        _line++;
+        self.line++;
     }
     // Handle SLASH with check for a comment
     else if (c == '/') {
@@ -130,7 +130,7 @@
         }
         // Error if not a literal or alpha
         else {
-            [Lox error:_line message:[NSString stringWithFormat:@"Unexpected character %c", c]];
+            [Lox error:self.line message:[NSString stringWithFormat:@"Unexpected character %c", c]];
         }
     }
 }
@@ -139,7 +139,7 @@
     while ([self isAlphaNumeric:[self peek]]) {
         [self advance];
     }
-    NSString *text = [_source substringWithRange:NSMakeRange(_start, _current - _start)];
+    NSString *text = [self.source substringWithRange:NSMakeRange(self.start, self.current - self.start)];
     NSMutableDictionary *KeywordTokenTypes = [self GetKeywordTokenTypes];
     if ([KeywordTokenTypes objectForKey:text] != NULL) {
         [self addSingleToken:[KeywordTokenTypes objectForKey:text]];
@@ -152,18 +152,18 @@
 - (void)string {
     while ([self peek] != '"' && ![self isAtEnd]) {
         if ([self peek] == '\n') {
-            _line++;
+            self.line++;
         }
         [self advance];
     }
 
     if ([self isAtEnd]) {
-        [Lox error:_line message:@"Unterminated string"];
+        [Lox error:self.line message:@"Unterminated string"];
     }
 
     [self advance];
 
-    NSString *value = [_source substringWithRange:NSMakeRange(_start + 1, _current - _start - 2)];
+    NSString *value = [self.source substringWithRange:NSMakeRange(self.start + 1, self.current - self.start - 2)];
     [self addToken:@"STRING" literal:value];
 }
 
@@ -182,7 +182,7 @@
         }
     }
 
-    NSString *text = [_source substringWithRange:NSMakeRange(_start, _current - _start)];
+    NSString *text = [self.source substringWithRange:NSMakeRange(self.start, self.current - self.start)];
     [self addToken:@"NUMBER" literal:text];
 }
 
@@ -200,7 +200,7 @@
 
 - (BOOL)match:(char)expected {
     if (![self isAtEnd] && [self peek] == expected) {
-        _current++;
+        self.current++;
         return YES;
     }
 
@@ -208,22 +208,22 @@
 }
 
 - (BOOL)isAtEnd {
-    return _current >= [_source length];
+    return self.current >= [self.source length];
 }
 
 - (char)peek {
     // May have to include end of string char
-    return [_source characterAtIndex:_current];
+    return [self.source characterAtIndex:self.current];
 }
 
 - (char)peekNext {
     // May have to include end of string char
-    return [_source characterAtIndex:_current + 1];
+    return [self.source characterAtIndex:self.current + 1];
 }
 
 - (char)advance {
-    char nextChar = [_source characterAtIndex:_current];
-    _current++;
+    char nextChar = [self.source characterAtIndex:self.current];
+    self.current++;
     return nextChar;
 }
 
@@ -232,7 +232,7 @@
 }
 
 - (void)addToken:(NSString)tempType literal:(NSString *)literal {
-    NSString *text = [_source substringWithRange:NSMakeRange(_start, _current - _start)];
-    Token *token = [[Token alloc] initWithData:tempType lexeme:text literal:literal line:_line];
-    [_tokens addObject:token];
+    NSString *text = [self.source substringWithRange:NSMakeRange(self.start, self.current - self.start)];
+    Token *token = [[Token alloc] initWithData:tempType lexeme:text literal:literal line:self.line];
+    [self.tokens addObject:token];
 }

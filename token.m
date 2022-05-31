@@ -5,16 +5,16 @@
 - (instancetype)initWithData:(NSString *)type lexeme:(NSString *)lexeme literal:(NSString *)literal line:(int)line {
     self = [super init]
     if (self) {
-        _token_type = type;
-        _lexeme = lexeme;
-        _literal = literal;
-        _line = line;
+        self.token_type = type;
+        self.lexeme = lexeme;
+        self.literal = literal;
+        self.line = line;
     }
     return self;
 }
 
 + (NSString *)print {
-    return @"%@ %@ %@", _token_type, _lexeme, _literal;
+    return @"%@ %@ %@", self.token_type, self.lexeme, self.literal;
 }
 
 @end

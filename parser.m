@@ -7,8 +7,8 @@
 @implementation Parser
 - (instancetype)initWithTokens:(NSMutableArray *)tokens {
     if (self = [super init]) {
-        _tokens = tokens;
-        _current = 0;
+        self.tokens = tokens;
+        self.current = 0;
     }
     return self;
 }
@@ -328,7 +328,7 @@
 
 - (Token *)advance {
     if (![self isAtEnd]) {
-        _current++;
+        self.current++;
     }
     return [self previous];
 }
@@ -338,11 +338,11 @@
 }
 
 - (Token *)peek {
-    return [_tokens objectAtIndex:_current];
+    return [self.tokens objectAtIndex:self.current];
 }
 
 - (Token *)previous {
-    return [_tokens objectAtIndex:_current - 1];
+    return [self.tokens objectAtIndex:self.current - 1];
 }
 
 - (void)synchronize {

@@ -3,7 +3,7 @@
 @implementation Block
 - (instancetype)initWithStatements:(NSMutableArray *)statements {
     if (self = [super init]) {
-        _statements = statements;
+        self.statements = statements;
     }
     return self;
 }
@@ -17,7 +17,7 @@
 @interface Expression : Stmt
 - (instancetype)initWithExpression:(Expr *)expression {
     if (self = [super init]) {
-        _expression = expression;
+        self.expression = expression;
     }
     return self;
 }
@@ -29,9 +29,9 @@
 @interface If : Stmt
 - (instancetype)initWithCondition:(Expr *)condition thenBranch:(Stmt *)thenBranch elseBranch:(Stmt *)elseBranch {
     if (self = [super init]) {
-        _condition = condition;
-        _thenBranch = thenBranch;
-        _elseBranch = elseBranch;
+        self.condition = condition;
+        self.thenBranch = thenBranch;
+        self.elseBranch = elseBranch;
     }
     return self;
 }
@@ -43,7 +43,7 @@
 @interface Print : Stmt
 - (instancetype)initWithExpression:(Expr *)expression {
     if (self = [super init]) {
-        _expression = expression;
+        self.expression = expression;
     }
     return self;
 }
@@ -55,8 +55,8 @@
 @interface Var : Stmt
 - (instancetype)initWithName:(Token *)name initializer:(Expr *)initializer {
     if (self = [super init]) {
-        _name = name;
-        _initializer = initializer;
+        self.name = name;
+        self.initializer = initializer;
     }
     return self;
 }
@@ -68,8 +68,8 @@
 @interface While : Stmt
 - (instancetype)initWithCondition:(Expr *)condition body:(Stmt *)body {
     if (self = [super init]) {
-        _condition = condition;
-        _body = body;
+        self.condition = condition;
+        self.body = body;
     }
     return self;
 }

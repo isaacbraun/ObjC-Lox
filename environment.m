@@ -6,31 +6,31 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        _values = [NSMutableDictionary dictionary];
-        _enclosing = nil;
+        self.values = [NSMutableDictionary dictionary];
+        self.enclosing = nil;
     }
     return self;
 }
 
 - (instancetype)initWithEnclosing:(Environment *)enclosing {
     if (self = [super init]) {
-        _values = [NSMutableDictionary dictionary];
-        _enclosing = enclosing;
+        self.values = [NSMutableDictionary dictionary];
+        self.enclosing = enclosing;
     }
     return self;
 }
 
 - (void)define:(NSString *)name value:(id)value {
-    [_values setObject:value  forKey:name];
+    [self.values setObject:value  forKey:name];
 }
 
 - (id)get:(Token *)name {
-    id value = [_values objectForKey:name.lexeme];
+    id value = [self.values objectForKey:name.lexeme];
     if (value != nil) {
         return value;
     }
-    if (_enclosing != nil) {
-        return [_enclosing get:name];
+    if (self.enclosing != nil) {
+        return [self.enclosing get:name];
     }
 
     [Lox runtimeError:name.line message:[NSString stringWithFormat:@"Undefined variable '%@'.", name.lexeme]];
@@ -38,13 +38,13 @@
 }
 
 - (void)assign:(Token *)name value:(id)value {
-    if ([_values objectForKey:name.lexeme] != nil) {
-        [_values setObject:value forKey:name.lexeme];
+    if ([self.values objectForKey:name.lexeme] != nil) {
+        [self.values setObject:value forKey:name.lexeme];
         return;
     }
 
-    if (_enclosing != nil) {
-        [_enclosing assign:name value:value];
+    if (self.enclosing != nil) {
+        [self.enclosing assign:name value:value];
         return;
     }
     

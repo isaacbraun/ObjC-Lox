@@ -5,8 +5,8 @@
 @implementation Assign
 - (instancetype)initWithName:(Token *)name value:(Expr *)value {
     if (self = [super init]) {
-        _name = name;
-        _value = value;
+        self.name = name;
+        self.value = value;
     }
     return self;
 }
@@ -18,9 +18,9 @@
 @implementation Binary
 - (instancetype)initWithLeft:(Expr *)left operator:(Token *)operator right:(Expr *)right {
     if (self = [super init]) {
-        _left = left;
-        _operator = operator;
-        _right = right;
+        self.left = left;
+        self.operator = operator;
+        self.right = right;
     }
     return self;
 }
@@ -32,7 +32,7 @@
 @implementation Grouping
 - (instancetype)initWithExpression:(Expr *)expression {
     if (self = [super init]) {
-        _expression = expression;
+        self.expression = expression;
     }
     return self;
 }
@@ -44,7 +44,7 @@
 @implementation Literal
 - (instancetype)initWithValue:(id)value {
     if (self = [super init]) {
-        _value = value;
+        self.value = value;
     }
     return self;
 }
@@ -56,9 +56,9 @@
 @implementation Logical
 - (instancetype)initWithLeft:(Expr *)left operator:(Token *)operator right:(Expr *)right {
     if (self = [super init]) {
-        _left = left;
-        _operator = operator;
-        _right = right;
+        self.left = left;
+        self.operator = operator;
+        self.right = right;
     }
     return self;
 }
@@ -70,8 +70,8 @@
 @implementation Unary
 - (instancetype)initWithOperator:(Token *)operator right:(Expr *)right {
     if (self = [super init]) {
-        _operator = operator;
-        _right = right;
+        self.operator = operator;
+        self.right = right;
     }
     return self;
 }
@@ -83,7 +83,7 @@
 @implementation Variable
 - (instancetype)initWithName:(Token *)name {
     if (self = [super init]) {
-        _name = name;
+        self.name = name;
     }
     return self;
 }

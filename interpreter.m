@@ -8,7 +8,7 @@
 @implementation Interpreter
 - (instancetype)init {
     if (self = [super init]) {
-        _environment = [[Environment alloc] init];
+        self.environment = [[Environment alloc] init];
     }
     return self;
     
@@ -58,7 +58,7 @@
 }
 
 - (NSString *)visitVariable:(Expr *)expr {
-    return [_environment get:expr.name];
+    return [self.environment get:expr.name];
 }
 
 - (id)visitGrouping:(Expr *)expr {
@@ -66,7 +66,7 @@
 }
 
 - (id)visitBlock:(Stmt *)stmt {
-    [self executeBlock:stmt.statements withEnvironment:_environment];
+    [self executeBlock:stmt.statements withEnvironment:self.environment];
 }
 
 - (id)visitExpression:(Stmt *)stmt {
@@ -98,7 +98,7 @@
         value = [self evaluate:stmt.initializer];
     }
 
-    [_environment define:stmt.name.lexeme value:value];
+    [self.environment define:stmt.name.lexeme value:value];
     return nil;
 }
 
@@ -112,7 +112,7 @@
 
 - (id)visitAssign:(Expr *)expr {
     id value = [self evaluate:expr.value];
-    [_environment assign:expr.name value:value];
+    [self.environment assign:expr.name value:value];
     return value;
 }
 
@@ -255,17 +255,17 @@
 }
 
 - (void)executeBlock:(NSMutableArray *)statements withEnvironment:(Environment *)environment {
-    Environment *previous = _environment;
+    Environment *previous = self.environment;
 
     @try {
-        _environment = environment;
+        self.environment = environment;
 
         for (Stmt *stmt in statements) {
             [self execute:stmt];
         }
     }
     @finally {
-        _environment = previous;
+        self.environment = previous;
     }
 }
 
