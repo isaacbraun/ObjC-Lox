@@ -7,6 +7,7 @@
 @interface Parser : NSObject {
     NSMutableArray *tokens;
     int current;
+    Lox *lox;
 }
 
 // @property(nonatomic, readwrite, retain) NSMutableArray *tokens;
