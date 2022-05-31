@@ -3,7 +3,7 @@
 #import "expr.h"
 
 @interface Stmt : NSObject
-+ (void)accept:(id)visitor;
++ (id)accept:(id)stmt vistor:(id)visitor;
 @end
 
 @interface Block : Stmt {

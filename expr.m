@@ -2,19 +2,13 @@
 #import "token.h"
 
 @implementation Expr
-+ (void)accept:(id)visitor {
++ (id)accept:(id)expr vistor:(id)visitor {
     // https://stackoverflow.com/questions/9366079/visitor-pattern-in-objective-c
-    Class class = [visitor class];
-    while (class && class != [NSObject class])
+    NSString *methodName = [NSString stringWithFormat:@"visit%@:", [expr class]];
+    SEL selector = NSSelectorFromString(methodName);
+    if ([visitor respondsToSelector:selector])
     {
-        NSString *methodName = [NSString stringWithFormat:@"visit%@:", class];
-        SEL selector = NSSelectorFromString(methodName);
-        if ([visitor respondsToSelector:selector])
-        {
-            [visitor performSelector:selector withObject:self];
-            return;
-        }
-        class = [class superclass];
+        return [visitor performSelector:selector withObject:expr];
     }
 }
 @end
@@ -27,6 +21,22 @@
     if (self = [super init]) {
         self.name = param_name;
         self.value = param_value;
+    }
+    return self;
+}
+
+@end
+
+@implementation Math
+@synthesize left;
+@synthesize operator;
+@synthesize right;
+
+- (instancetype)initWithLeft:(Expr *)param_left operator:(Token *)param_operator right:(Expr *)param_right {
+    if (self = [super init]) {
+        self.left = param_left;
+        self.operator = param_operator;
+        self.right = param_right;
     }
     return self;
 }
@@ -90,6 +100,20 @@
 @end
 
 @implementation Unary
+@synthesize operator;
+@synthesize right;
+
+- (instancetype)initWithOperator:(Token *)param_operator right:(Expr *)param_right {
+    if (self = [super init]) {
+        self.operator = param_operator;
+        self.right = param_right;
+    }
+    return self;
+}
+
+@end
+
+@implementation Negate
 @synthesize operator;
 @synthesize right;
 

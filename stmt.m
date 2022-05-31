@@ -3,19 +3,13 @@
 #import "token.h"
 
 @implementation Stmt
-+ (void)accept:(id)visitor {
++ (id)accept:(id)stmt vistor:(id)visitor {
     // https://stackoverflow.com/questions/9366079/visitor-pattern-in-objective-c
-    Class class = [visitor class];
-    while (class && class != [NSObject class])
+    NSString *methodName = [NSString stringWithFormat:@"visit%@:", [stmt class]];
+    SEL selector = NSSelectorFromString(methodName);
+    if ([visitor respondsToSelector:selector])
     {
-        NSString *methodName = [NSString stringWithFormat:@"visit%@:", class];
-        SEL selector = NSSelectorFromString(methodName);
-        if ([visitor respondsToSelector:selector])
-        {
-            [visitor performSelector:selector withObject:self];
-            return;
-        }
-        class = [class superclass];
+        return [visitor performSelector:selector withObject:stmt];
     }
 }
 @end

@@ -23,15 +23,17 @@
         }
     }
     @catch (NSException *exception) {
-        [lox runtimeError:exception.reason];
+        NSLog(@"%@", exception);
+        // [lox runtimeError:exception.line withMessage:exception.reason];
+        // [lox runtimeError:exception.reason];
     }
 }
 
-- (NSString *)visitLiteral:(Expr *)expr {
+- (NSString *)visitLiteral:(Literal *)expr {
     return expr.value;
 }
 
-- (id)visitLogical:(Expr *)expr {
+- (id)visitLogical:(Logical *)expr {
     id left = [self evaluate:expr.left];
     if (expr.operator.token_type == @"OR") {
         if ([self isTruthy:left]) {
@@ -46,35 +48,37 @@
     return [self evaluate:expr.right];
 }
 
-- (id)visitUnary:(Expr *)expr {
+- (BOOL)visitUnary:(Unary *)expr {
     id right = [self evaluate:expr.right];
     if (expr.operator.token_type == @"BANG") {
         return ![self isTruthy:right];
     }
-    else if (expr.operator.token_type == @"MINUS") {
-        [self checkNumberOperand:expr.operator operand:right];
-        return @(-[right doubleValue]);
-    }
-    return nil;
 }
 
-- (NSString *)visitVariable:(Expr *)expr {
+- (NSNumber *)visitNegate:(Negate *)expr {
+    id right = [self evaluate:expr.right];
+    if (expr.operator.token_type == @"MINUS") {
+        return [NSNumber numberWithDouble:-1 * [right doubleValue]];
+    }
+}
+
+- (NSString *)visitVariable:(Variable *)expr {
     return [environment get:expr.name];
 }
 
-- (id)visitGrouping:(Expr *)expr {
+- (id)visitGrouping:(Grouping *)expr {
     return [self evaluate:expr.expression];
 }
 
-- (id)visitBlock:(Stmt *)stmt {
+- (void)visitBlock:(Block *)stmt {
     [self executeBlock:stmt.statements withEnvironment:environment];
 }
 
-- (id)visitExpression:(Stmt *)stmt {
+- (id)visitExpression:(Expression *)stmt {
     return [self evaluate:stmt.expression];
 }
 
-- (id)visitIf:(Stmt *)stmt {
+- (void)visitIf:(If *)stmt {
     id condition = [self evaluate:stmt.condition];
 
     if ([self isTruthy:condition]) {
@@ -83,41 +87,35 @@
     else if (stmt.elseBranch != nil) {
         [self execute:stmt.elseBranch];
     }
-    else {
-        return nil;
-    }
 }
 
-- (id)visitPrint:(Stmt *)stmt {
+- (void)visitPrint:(Print *)stmt {
     id value = [self evaluate:stmt.expression];
     NSLog(@"%@", [self stringify:value]);
 }
 
-- (id)visitVar:(Stmt *)stmt {
+- (void)visitVar:(Var *)stmt {
     id value = nil;
     if (stmt.initializer != nil) {
         value = [self evaluate:stmt.initializer];
     }
 
     [environment define:stmt.name.lexeme value:value];
-    return nil;
 }
 
-- (id)visitWhile:(Stmt *)stmt {
+- (void)visitWhile:(While *)stmt {
     while ([self isTruthy:[self evaluate:stmt.condition]]) {
         [self execute:stmt.body];
     }
-
-    return nil;
 }
 
-- (id)visitAssign:(Expr *)expr {
+- (id)visitAssign:(Assign *)expr {
     id value = [self evaluate:expr.value];
     [environment assign:expr.name value:value];
     return value;
 }
 
-- (id)visitBinary:(Expr *)expr {
+- (id)visitMath:(Math *)expr {
     id left = [self evaluate:expr.left];
     id right = [self evaluate:expr.right];
 
@@ -142,7 +140,13 @@
             return [NSNumber numberWithDouble:[left doubleValue] + [right doubleValue]];
         }
     }
-    else if (expr.operator.token_type == @"GR") {
+}
+
+- (BOOL)visitBinary:(Binary *)expr {
+    id left = [self evaluate:expr.left];
+    id right = [self evaluate:expr.right];
+
+    if (expr.operator.token_type == @"GR") {
         if ([self checkStringOperands:expr.operator left:left right:right]) {
             return [left isGreaterThan:right];
         }
@@ -184,42 +188,40 @@
     else if (expr.operator.token_type == @"BANG_EQ") {
         return ![left isEqualTo:right];
     }
-    
-    return nil;
 }
 
-- (BOOL *)checkNumberOperand:(Token *)operator operand:(Expr *)operand {
+- (BOOL)checkNumberOperand:(Token *)operator operand:(Token *)operand {
     if ([operand.token_type isEqualToString:@"NUMBER"]) {
         return YES;
     }
-    [lox error:operator.line message:@"Operand must be a number."];
+    [lox error:(NSNumber *)operator.line message:@"Operand must be a number."];
 }
 
-- (BOOL *)checkNumberOperands:(Token *)operator left:(Expr *)left right:(Expr *)right {
+- (BOOL)checkNumberOperands:(Token *)operator left:(Token *)left right:(Token *)right {
     if ([left.token_type isEqualToString:@"NUMBER"] && [right.token_type isEqualToString:@"NUMBER"]) {
         return YES;
     }
-    [lox error:operator.line message:@"Operands must be numbers."];
+    [lox error:(NSNumber *)operator.line message:@"Operands must be numbers."];
 }
 
-- (BOOL *)checkStringOperands:(Token *)operator left:(Expr *)left right:(Expr *)right {
+- (BOOL)checkStringOperands:(Token *)operator left:(Token *)left right:(Token *)right {
     if ([left.token_type isEqualToString:@"STRING"] && [right.token_type isEqualToString:@"STRING"]) {
         return YES;
     }
     // [lox error:operator.line message:@"Operands must be strings."];
 }
 
-- (BOOL *)isTruthy:(id)object {
+- (BOOL)isTruthy:(id)object {
     if (object == nil || object == @"nil" || object == @"false") {
         return NO;
     }
-    if ([object isKindOfClass:[BOOL class]]) {
-        return object;
-    }
+    // if (object == @"true" || object == @"1" || object == @(1)) {
+    //     return YES;
+    // }
     return YES;
 }
 
-// - (BOOL *)isEqual:(id)a b:(id)b
+// - (BOOL)isEqual:(id)a b:(id)b
 
 - (NSString *)stringify:(id)object {
     if (object == nil) {
@@ -235,12 +237,12 @@
         return text;
     }
 
-    NSString *output = (NSString) object;
+    NSString *output = [NSString stringWithFormat:@"%@", object];
 
-    if (output == YES) {
+    if (output == @"YES") {
         return @"true";
     }
-    else if (output == NO) {
+    else if (output == @"NO") {
         return @"false";
     }
 
@@ -248,18 +250,18 @@
 }
 
 - (id)evaluate:(Expr *)expr {
-    return [expr accept:self];
+    return [expr accept:expr visitor:self];
 }
 
 - (void)execute:(Stmt *)stmt {
-    [stmt accept:self];
+    [stmt accept:stmt visitor:self];
 }
 
-- (void)executeBlock:(NSMutableArray *)statements withEnvironment:(Environment *)environment {
+- (void)executeBlock:(NSMutableArray *)statements withEnvironment:(Environment *)param_environment {
     Environment *previous = environment;
 
     @try {
-        environment = environment;
+        environment = param_environment;
 
         for (Stmt *stmt in statements) {
             [self execute:stmt];

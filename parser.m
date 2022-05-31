@@ -243,7 +243,7 @@
     while ([self match:@[@"PLUS", @"MINUS"]]) {
         Token *operator = [self previous];
         Expr *right = [self factor];
-        expr = [[Binary alloc] initWithLeft:expr operator:operator right:right];
+        expr = [[Math alloc] initWithLeft:expr operator:operator right:right];
     }
 
     return expr;
@@ -255,20 +255,30 @@
     while ([self match:@[@"STAR", @"SLASH"]]) {
         Token *operator = [self previous];
         Expr *right = [self unary];
-        expr = [[Binary alloc] initWithLeft:expr operator:operator right:right];
+        expr = [[Math alloc] initWithLeft:expr operator:operator right:right];
     }
 
     return expr;
 }
 
 - (Expr *)unary {
-    if ([self match:@[@"BANG", @"MINUS"]]) {
+    if ([self match:@[@"BANG"]]) {
         Token *operator = [self previous];
         Expr *right = [self unary];
         return [[Unary alloc] initWithOperator:operator right:right];
     }
 
     return [self primary];
+}
+
+- (Expr *)negate {
+    if ([self match:@[@"MINUS"]]) {
+        Token *operator = [self previous];
+        Expr *right = [self unary];
+        return [[Negate alloc] initWithOperator:operator right:right];
+    }
+
+    return nil;
 }
 
 - (Expr *)primary {

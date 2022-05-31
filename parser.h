@@ -2,6 +2,7 @@
 #import "expr.h"
 #import "stmt.h"
 #import "token.h"
+#import "lox.h"
 
 @interface Parser : NSObject {
     NSMutableArray *tokens;

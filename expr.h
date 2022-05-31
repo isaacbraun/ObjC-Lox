@@ -2,7 +2,7 @@
 #import "token.h"
 
 @interface Expr : NSObject
-+ (void)accept:(id)visitor;
++ (id)accept:(id)expr vistor:(id)visitor;
 @end
 
 
@@ -15,6 +15,16 @@
 - (instancetype)initWithName:(Token *)param_name value:(Expr *)param_value;
 @end
 
+@interface Math : Expr {
+    Expr *left;
+    Token *operator;
+    Expr *right;
+}
+@property(nonatomic, readwrite, retain) Expr *left;
+@property(nonatomic, readwrite, retain) Token *operator;
+@property(nonatomic, readwrite, retain) Expr *right;
+- (instancetype)initWithLeft:(Expr *)param_left operator:(Token *)param_operator right:(Expr *)param_right;
+@end
 
 @interface Binary : Expr {
     Expr *left;
@@ -57,6 +67,16 @@
 
 
 @interface Unary : Expr {
+    Token *operator;
+    Expr *right;
+}
+@property(nonatomic, readwrite, retain) Token *operator;
+@property(nonatomic, readwrite, retain) Expr *right;
+- (instancetype)initWithOperator:(Token *)param_operator right:(Expr *)param_right;
+@end
+
+
+@interface Negate : Expr {
     Token *operator;
     Expr *right;
 }
