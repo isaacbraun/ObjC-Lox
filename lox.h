@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import "token.h"
 
 @interface Lox : NSObject
 
@@ -10,7 +11,7 @@
 - (void)runPrompt;
 - (void)run:(NSString *)source;
 + (void)error:(NSNumber *)line message:(NSString *)message;
-+ (void)runtimeError:(Error *)error;
+// + (void)runtimeError:(Error *)error;
 + (void)parserError:(Token *)token message:(NSString *)message;
 + (void)report:(NSNumber *)line where:(NSString *)where message:(NSString *)message;
 

@@ -3,8 +3,8 @@
 
 @interface Environment : NSObject
 
-@property(nonatomic, readwrite) NSMutableDictionary *values;
-@property(nonatomic, readwrite) Environment *enclosing;
+@property(nonatomic, readwrite, retain) NSMutableDictionary *values;
+@property(nonatomic, readwrite, retain) Environment *enclosing;
 
 - (instancetype)init;
 - (instancetype)initWithEnclosing:(Environment)enclosing;

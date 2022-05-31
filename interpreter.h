@@ -6,7 +6,7 @@
 
 @interface Interpreter : NSObject
 
-@property(nonatomic, readwrite) Environment *environment;
+@property(nonatomic, readwrite, retain) Environment *environment;
 
 - (instancetype)init;
 - (void)interpret:(NSMutableArray *)statements;

@@ -5,22 +5,22 @@
 @end
 
 @interface Assign : Expr
-@property(nonatomic, readwrite) Token *name;
-@property(nonatomic, readwrite) Expr *value;
+@property(nonatomic, readwrite, retain) Token *name;
+@property(nonatomic, readwrite, retain) Expr *value;
 - (instancetype)initWithName:(Token *)name value:(Expr *)value;
 - (void)accept:(Visitor *)visitor;
 @end
 
 @interface Binary : Expr
-@property(nonatomic, readwrite) Expr *left;
-@property(nonatomic, readwrite) Token *operator;
-@property(nonatomic, readwrite) Expr *right;
+@property(nonatomic, readwrite, retain) Expr *left;
+@property(nonatomic, readwrite, retain) Token *operator;
+@property(nonatomic, readwrite, retain) Expr *right;
 - (instancetype)initWithLeft:(Expr *)left operator:(Token *)operator right:(Expr *)right;
 - (void)accept:(Visitor *)visitor;
 @end
 
 @interface Grouping : Expr
-@property(nonatomic, readwrite) Expr *expression;
+@property(nonatomic, readwrite, retain) Expr *expression;
 - (instancetype)initWithExpression:(Expr *)expression;
 - (void)accept:(Visitor *)visitor;
 @end
@@ -32,22 +32,22 @@
 @end
 
 @interface Logical : Expr
-@property(nonatomic, readwrite) Expr *left;
-@property(nonatomic, readwrite) Token *operator;
-@property(nonatomic, readwrite) Expr *right;
+@property(nonatomic, readwrite, retain) Expr *left;
+@property(nonatomic, readwrite, retain) Token *operator;
+@property(nonatomic, readwrite, retain) Expr *right;
 - (instancetype)initWithLeft:(Expr *)left operator:(Token *)operator right:(Expr *)right;
 - (void)accept:(Visitor *)visitor;
 @end
 
 @interface Unary : Expr
-@property(nonatomic, readwrite) Token *operator;
-@property(nonatomic, readwrite) Expr *right;
+@property(nonatomic, readwrite, retain) Token *operator;
+@property(nonatomic, readwrite, retain) Expr *right;
 - (instancetype)initWithOperator:(Token *)operator right:(Expr *)right;
 - (void)accept:(Visitor *)visitor;
 @end
 
 @interface Variable : Expr
-@property(nonatomic, readwrite) Token *name;
+@property(nonatomic, readwrite, retain) Token *name;
 - (instancetype)initWithName:(Token *)name;
 - (void)accept:(Visitor *)visitor;
 @end

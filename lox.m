@@ -12,7 +12,7 @@
     return self;
 }
 
-- (void)runFile:(NSString)path {
+- (void)runFile:(NSString *)path {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     if ([fileManager fileExistsAtPath:path] == YES) {
@@ -51,7 +51,7 @@
     // }
 }
 
-- (void)run:(NSString)source {
+- (void)run:(NSString *)source {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; 
 
     Scanner *scanner = [[Scanner alloc] init];
@@ -80,16 +80,16 @@
     [pool drain];
 }
 
-+ (void)error:(NSNumber)line message:(NSString)message {
++ (void)error:(NSNumber *)line message:(NSString *)message {
     [self report:line where:@"" message:message];
 }
 
-+ (void)runtimeError:(Error)error {
-    NSLog(@"%@ \n[line %d]", [error getMessage], error.token.line);
-    hadRuntimeError = YES;
-}
+// + (void)runtimeError:(Error *)error {
+//     NSLog(@"%@ \n[line %d]", [error getMessage], error.token.line);
+//     hadRuntimeError = YES;
+// }
 
-+ (void)parserError:(Token)token message:(NSString)message {
++ (void)parserError:(Token *)token message:(NSString *)message {
     if (token.token_type == @"EOF") {
         [self report:token.line where:@" at end" message:message];
     }
@@ -98,7 +98,7 @@
     }
 }
 
-+ (void)report:(NSNumber)line where:(NSString)where message:(NSString)message {
++ (void)report:(NSNumber *)line where:(NSString *)where message:(NSString *)message {
     NSLog(@"[line %@] Error %@: %@", line, where, message);
     hadError = YES;
 }

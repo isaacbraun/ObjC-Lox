@@ -4,8 +4,8 @@
 
 @interface Scanner : NSObject
 
-@property(nonatomic, readwrite) NSString *source;
-@property(nonatomic, readwrite) NSMutableArray *tokens;
+@property(nonatomic, readwrite, retain) NSString *source;
+@property(nonatomic, readwrite, retain) NSMutableArray *tokens;
 @property(nonatomic, readwrite) int *start;
 @property(nonatomic, readwrite) int *current;
 @property(nonatomic, readwrite) int *line;
