@@ -29,7 +29,7 @@
         return [self.enclosing get:name];
     }
 
-    [lox runtimeError:name.line message:[NSString stringWithFormat:@"Undefined variable '%@'.", name.lexeme]];
+    [lox runtimeError:(NSNumber *)name.line message:[NSString stringWithFormat:@"Undefined variable '%@'.", name.lexeme]];
     return nil;
 }
 
@@ -44,7 +44,7 @@
         return;
     }
     
-    [lox runtimeError:name.line message:[NSString stringWithFormat:@"Undefined variable '%@'.", name.lexeme]];
+    [lox runtimeError:(NSNumber *)name.line message:[NSString stringWithFormat:@"Undefined variable '%@'.", name.lexeme]];
 }
 
 @end
