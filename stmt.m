@@ -1,4 +1,24 @@
 #import "stmt.h"
+#import "expr.h"
+#import "token.h"
+
+@implementation Stmt
++ (void)accept:(id *)visitor {
+    // https://stackoverflow.com/questions/9366079/visitor-pattern-in-objective-c
+    Class class = [visitor class];
+    while (class && class != [NSObject class])
+    {
+        NSString *methodName = [NSString stringWithFormat:@"visit%@:", class];
+        SEL selector = NSSelectorFromString(methodName);
+        if ([visitor respondsToSelector:selector])
+        {
+            [visitor performSelector:selector withObject:self];
+            return;
+        }
+        class = [class superclass];
+    }
+}
+@end
 
 @implementation Block
 - (instancetype)initWithStatements:(NSMutableArray *)statements {
@@ -8,9 +28,9 @@
     return self;
 }
 
-- (void)accept:(id *)visitor {
-    [visitor visitBlock:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitBlock:self];
+// }
 
 @end
 
@@ -21,9 +41,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitExpression:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitExpression:self];
+// }
 @end
 
 @interface If : Stmt
@@ -35,9 +55,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitIf:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitIf:self];
+// }
 @end
 
 @interface Print : Stmt
@@ -47,9 +67,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitPrint:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitPrint:self];
+// }
 @end
 
 @interface Var : Stmt
@@ -60,9 +80,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitVar:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitVar:self];
+// }
 @end
 
 @interface While : Stmt
@@ -73,7 +93,7 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitWhile:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitWhile:self];
+// }
 @end

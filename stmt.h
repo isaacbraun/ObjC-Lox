@@ -1,42 +1,43 @@
 #import <Foundation/Foundation.h>
 #import "token.h"
-#import "expr.h"
+#import "stmt.h"
 
 @interface Stmt : NSObject
++ (void)accept:(id *)visitor;
 @end
 
 @interface Block : Stmt
 @property(nonatomic, readwrite, retain) NSMutableArray *statements;
 - (instancetype)initWithStatements:(NSMutableArray *)statements;
-- (void)accept:(id *)visitor;
+// - (void)accept:(id *)visitor;
 @end
 
 @interface Expression : Stmt
 @property(nonatomic, readwrite, retain) Expr *expression;
 - (instancetype)initWithExpression:(Expr *)expression;
-- (void)accept:(id *)visitor;
+// - (void)accept:(id *)visitor;
 @end
 
 @interface If : Stmt
 @property(nonatomic, readwrite, retain) Expr *condition;
 - (instancetype)initWithCondition:(Expr *)condition thenBranch:(Stmt *)thenBranch elseBranch:(Stmt *)elseBranch;
-- (void)accept:(id *)visitor;
+// - (void)accept:(id *)visitor;
 @end
 
 @interface Print : Stmt
 @property(nonatomic, readwrite, retain) Expr *expression;
 - (instancetype)initWithExpression:(Expr *)expression;
-- (void)accept:(id *)visitor;
+// - (void)accept:(id *)visitor;
 @end
 
 @interface Var : Stmt
 @property(nonatomic, readwrite, retain) Token *name;
 - (instancetype)initWithName:(Token *)name initializer:(Expr *)initializer;
-- (void)accept:(id *)visitor;
+// - (void)accept:(id *)visitor;
 @end
 
 @interface While : Stmt
 @property(nonatomic, readwrite, retain) Expr *condition;
 - (instancetype)initWithCondition:(Expr *)condition body:(Stmt *)body;
-- (void)accept:(id *)visitor;
+// - (void)accept:(id *)visitor;
 @end

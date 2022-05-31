@@ -1,6 +1,23 @@
 #import "expr.h"
-#import "interpreter.h"
-#import "token.h";
+#import "token.h"
+
+@implementation Expr
++ (void)accept:(id *)visitor {
+    // https://stackoverflow.com/questions/9366079/visitor-pattern-in-objective-c
+    Class class = [visitor class];
+    while (class && class != [NSObject class])
+    {
+        NSString *methodName = [NSString stringWithFormat:@"visit%@:", class];
+        SEL selector = NSSelectorFromString(methodName);
+        if ([visitor respondsToSelector:selector])
+        {
+            [visitor performSelector:selector withObject:self];
+            return;
+        }
+        class = [class superclass];
+    }
+}
+@end
 
 @implementation Assign
 - (instancetype)initWithName:(Token *)name value:(Expr *)value {
@@ -10,9 +27,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitAssign:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitAssign:self];
+// }
 @end
 
 @implementation Binary
@@ -24,9 +41,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitBinary:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitBinary:self];
+// }
 @end
 
 @implementation Grouping
@@ -36,9 +53,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitGrouping:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitGrouping:self];
+// }
 @end
 
 @implementation Literal
@@ -48,9 +65,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitLiteral:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitLiteral:self];
+// }
 @end
 
 @implementation Logical
@@ -62,9 +79,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitLogical:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitLogical:self];
+// }
 @end
 
 @implementation Unary
@@ -75,9 +92,9 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitUnary:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitUnary:self];
+// }
 @end
 
 @implementation Variable
@@ -87,7 +104,7 @@
     }
     return self;
 }
-- (void)accept:(id *)visitor {
-    [visitor visitVariable:self];
-}
+// - (void)accept:(id *)visitor {
+//     [visitor visitVariable:self];
+// }
 @end
