@@ -15,22 +15,6 @@
     return self;
 }
 
-// - (BOOL *)hadError {
-//     return _hadError;
-// }
-
-// - (void)setHadError:(BOOL *)hadError {
-//     _hadError = hadError;
-// }
-
-// - (BOOL *)hadRuntimeError {
-//     return _hadRuntimeError;
-// }
-
-// - (void)setHadRuntimeError:(BOOL *)hadRuntimeError {
-//     _hadRuntimeError = hadRuntimeError;
-// }
-
 - (void)runFile:(NSString *)path {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 

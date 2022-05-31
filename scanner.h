@@ -8,13 +8,8 @@
     int current;
     int start;
     int line;
+    Lox *lox;
 }
-
-// @property(nonatomic, readwrite, retain) NSString *source;
-// @property(nonatomic, readwrite, retain) NSMutableArray *tokens;
-// @property(nonatomic, readwrite) int *start;
-// @property(nonatomic, readwrite) int *current;
-// @property(nonatomic, readwrite) int *line;
 
 - (instancetype)initWithSource:(NSString *)param_source andLox:(Lox *)param_lox;
 - (NSMutableDictionary *)GetLiteralTokenTypes;

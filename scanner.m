@@ -4,7 +4,7 @@
 
 @implementation Scanner
 
-- (instancetype)initWithSource:(NSString *)param_source andlox:(lox *)param_lox {
+- (instancetype)initWithSource:(NSString *)param_source andlox:(Lox *)param_lox {
     self = [super init];
     if (self) {
         source = param_source;

@@ -10,9 +10,6 @@
     Lox *lox;
 }
 
-// @property(nonatomic, readwrite, retain) NSMutableArray *tokens;
-// @property(nonatomic, readwrite, retain) NSNumber *current;
-
 - (instancetype)initWithTokens:(NSMutableArray *)param_tokens andLox:(Lox *)param_lox;
 - (NSMutableArray *)parse;
 - (Stmt *)declaration;

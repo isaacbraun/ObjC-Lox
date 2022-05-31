@@ -9,8 +9,6 @@
     Lox *lox;
 }
 
-// @property(nonatomic, readwrite, retain) Environment *environment;
-
 - (instancetype)initWithLox:(Lox *)param_lox;
 - (void)interpret:(NSMutableArray *)statements;
 - (NSString *)visitLiteral:(Literal *)expr;
