@@ -3,7 +3,7 @@
 #import "token.h"
 
 @implementation Stmt
-+ (void)accept:(id *)visitor {
++ (void)accept:(id)visitor {
     // https://stackoverflow.com/questions/9366079/visitor-pattern-in-objective-c
     Class class = [visitor class];
     while (class && class != [NSObject class])
@@ -21,79 +21,75 @@
 @end
 
 @implementation Block
-- (instancetype)initWithStatements:(NSMutableArray *)statements {
+@synthesize statements;
+
+- (instancetype)initWithStatements:(NSMutableArray *)param_statements {
     if (self = [super init]) {
-        self.statements = statements;
+        self.statements = param_statements;
     }
     return self;
 }
-
-// - (void)accept:(id *)visitor {
-//     [visitor visitBlock:self];
-// }
-
 @end
 
-@interface Expression : Stmt
-- (instancetype)initWithExpression:(Expr *)expression {
+@implementation Expression
+@synthesize expression;
+
+- (instancetype)initWithExpression:(Expr *)param_expression {
     if (self = [super init]) {
-        self.expression = expression;
+        self.expression = param_expression;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitExpression:self];
-// }
 @end
 
-@interface If : Stmt
-- (instancetype)initWithCondition:(Expr *)condition thenBranch:(Stmt *)thenBranch elseBranch:(Stmt *)elseBranch {
+@implementation If
+@synthesize condition;
+@synthesize thenBranch;
+@synthesize elseBranch;
+
+- (instancetype)initWithCondition:(Expr *)param_condition thenBranch:(Stmt *)param_thenBranch elseBranch:(Stmt *)param_elseBranch {
     if (self = [super init]) {
-        self.condition = condition;
-        self.thenBranch = thenBranch;
-        self.elseBranch = elseBranch;
+        self.condition = param_condition;
+        self.thenBranch = param_thenBranch;
+        self.elseBranch = param_elseBranch;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitIf:self];
-// }
 @end
 
-@interface Print : Stmt
-- (instancetype)initWithExpression:(Expr *)expression {
+@implementation Print
+@synthesize expression;
+
+- (instancetype)initWithExpression:(Expr *)param_expression {
     if (self = [super init]) {
-        self.expression = expression;
+        self.expression = param_expression;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitPrint:self];
-// }
 @end
 
-@interface Var : Stmt
-- (instancetype)initWithName:(Token *)name initializer:(Expr *)initializer {
+@implementation Var
+@synthesize name;
+@synthesize initializer;
+
+- (instancetype)initWithName:(Token *)param_name initializer:(Expr *)param_initializer {
     if (self = [super init]) {
-        self.name = name;
-        self.initializer = initializer;
+        self.name = param_name;
+        self.initializer = param_initializer;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitVar:self];
-// }
 @end
 
-@interface While : Stmt
-- (instancetype)initWithCondition:(Expr *)condition body:(Stmt *)body {
+@implementation While
+@synthesize condition;
+@synthesize body;
+
+- (instancetype)initWithCondition:(Expr *)param_condition body:(Stmt *)param_body {
     if (self = [super init]) {
-        self.condition = condition;
-        self.body = body;
+        self.condition = param_condition;
+        self.body = param_body;
     }
     return self;
 }
-// - (void)accept:(id *)visitor {
-//     [visitor visitWhile:self];
-// }
 @end

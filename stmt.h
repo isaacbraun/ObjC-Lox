@@ -1,43 +1,57 @@
 #import <Foundation/Foundation.h>
 #import "token.h"
-#import "stmt.h"
+#import "expr.h"
 
 @interface Stmt : NSObject
-+ (void)accept:(id *)visitor;
++ (void)accept:(id)visitor;
 @end
 
-@interface Block : Stmt
+@interface Block : Stmt {
+    NSMutableArray *statements;
+}
 @property(nonatomic, readwrite, retain) NSMutableArray *statements;
-- (instancetype)initWithStatements:(NSMutableArray *)statements;
-// - (void)accept:(id *)visitor;
+- (instancetype)initWithStatements:(NSMutableArray *)param_statements;
 @end
 
-@interface Expression : Stmt
+@interface Expression : Stmt {
+    Expr *expression;
+}
 @property(nonatomic, readwrite, retain) Expr *expression;
-- (instancetype)initWithExpression:(Expr *)expression;
-// - (void)accept:(id *)visitor;
+- (instancetype)initWithExpression:(Expr *)param_expression;
 @end
 
-@interface If : Stmt
+@interface If : Stmt {
+    Expr *condition;
+    Stmt *thenBranch;
+    Stmt *elseBranch;
+}
 @property(nonatomic, readwrite, retain) Expr *condition;
-- (instancetype)initWithCondition:(Expr *)condition thenBranch:(Stmt *)thenBranch elseBranch:(Stmt *)elseBranch;
-// - (void)accept:(id *)visitor;
+@property(nonatomic, readwrite, retain) Stmt *thenBranch;
+@property(nonatomic, readwrite, retain) Stmt *elseBranch;
+- (instancetype)initWithCondition:(Expr *)param_condition thenBranch:(Stmt *)param_thenBranch elseBranch:(Stmt *)param_elseBranch;
 @end
 
-@interface Print : Stmt
+@interface Print : Stmt {
+    Expr *expression;
+}
 @property(nonatomic, readwrite, retain) Expr *expression;
-- (instancetype)initWithExpression:(Expr *)expression;
-// - (void)accept:(id *)visitor;
+- (instancetype)initWithExpression:(Expr *)param_expression;
 @end
 
-@interface Var : Stmt
+@interface Var : Stmt {
+    Token *name;
+    Expr *initializer;
+}
 @property(nonatomic, readwrite, retain) Token *name;
-- (instancetype)initWithName:(Token *)name initializer:(Expr *)initializer;
-// - (void)accept:(id *)visitor;
+@property(nonatomic, readwrite, retain) Expr *initializer;
+- (instancetype)initWithName:(Token *)param_name initializer:(Expr *)param_initializer;
 @end
 
-@interface While : Stmt
+@interface While : Stmt {
+    Expr *condition;
+    Stmt *body;
+}
 @property(nonatomic, readwrite, retain) Expr *condition;
-- (instancetype)initWithCondition:(Expr *)condition body:(Stmt *)body;
-// - (void)accept:(id *)visitor;
+@property(nonatomic, readwrite, retain) Stmt *body;
+- (instancetype)initWithCondition:(Expr *)param_condition body:(Stmt *)param_body;
 @end
