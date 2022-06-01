@@ -28,7 +28,7 @@
         return nil;
     }
 }
-- (Stmt *)declaration {
+- (id)declaration {
     @try {
         if ([self match:[NSArray arrayWithObjects:@"VAR"]]) {
             return [self varDeclaration];
@@ -41,7 +41,7 @@
     }
 }
 
-- (Stmt *)statement {
+- (id)statement {
     if ([self match:[NSArray arrayWithObjects:@"FOR"]]) {
         return [self forStatement];
     }
@@ -62,10 +62,10 @@
     }
 }
 
-- (Stmt *)forStatement {
+- (id)forStatement {
     [self consume:@"L_PAREN" message:@"Expect '(' after 'for'."];
 
-    Stmt *initializer = nil;
+    id initializer = nil;
     if ([self match:[NSArray arrayWithObjects:@"VAR"]]) {
         initializer = [self varDeclaration];
     }
@@ -87,7 +87,7 @@
 
     [self consume:@"R_PAREN" message:@"Expect ')' after for clauses."];
 
-    Stmt *body = [self statement];
+    id body = [self statement];
 
     if (increment) {
         Expression *incrementExpression = [[Expression alloc] initWithExpression:increment];
@@ -107,13 +107,13 @@
     return body;
 }
 
-- (Stmt *)ifStatement {
+- (id)ifStatement {
     [self consume:@"L_PAREN" message:@"Expect '(' after 'if'."];
     Expr *condition = [self expression];
     [self consume:@"R_PAREN" message:@"Expect ')' after if condition."];
 
-    Stmt *thenBranch = [self statement];
-    Stmt *elseBranch = nil;
+    id thenBranch = [self statement];
+    id elseBranch = nil;
 
     if ([self match:[NSArray arrayWithObjects:@"ELSE"]]) {
         elseBranch = [self statement];
@@ -122,7 +122,7 @@
     return [[If alloc] initWithCondition:condition thenBranch:thenBranch elseBranch:elseBranch];
 }
 
-- (Stmt *)varDeclaration {
+- (id)varDeclaration {
     Token *name = [self consume:@"IDENTIFIER" message:@"Expect variable name."];
 
     Expr *initializer = nil;
@@ -134,22 +134,22 @@
     return [[Var alloc] initWithName:name initializer:initializer];
 }
 
-- (Stmt *)whileStatement {
+- (id)whileStatement {
     [self consume:@"L_PAREN" message:@"Expect '(' after 'while'."];
     Expr *condition = [self expression];
     [self consume:@"R_PAREN" message:@"Expect ')' after while condition."];
-    Stmt *body = [self statement];
+    id body = [self statement];
 
     return [[While alloc] initWithCondition:condition body:body];
 }
 
-- (Stmt *)printStatement {
+- (id)printStatement {
     Expr *value = [self expression];
     [self consume:@"SEMICOLON" message:@"Expect ';' after value."];
     return [[Print alloc] initWithValue:value];
 }
 
-- (Stmt *)expressionStatement {
+- (id)expressionStatement {
     Expr *expression = [self expression];
     [self consume:@"SEMICOLON" message:@"Expect ';' after expression."];
     return [[Expression alloc] initWithExpression:expression];
@@ -166,16 +166,16 @@
     return statements;
 }
 
-- (Expr *)expression {
+- (id)expression {
     return [self assignment];
 }
 
-- (Expr *)assignment {
-    Expr *expr = [self OR];
+- (id)assignment {
+    id expr = [self OR];
 
     if ([self match:[NSArray arrayWithObjects:@"EQ"]]) {
         Token *equals = [self previous];
-        Expr *value = [self assignment];
+        id value = [self assignment];
 
         if ([expr isKindOfClass:[Variable class]]) {
             Token *name = expr.name;
@@ -189,99 +189,99 @@
     return expr;
 }
 
-- (Expr *)OR {
-    Expr *expr = [self AND];
+- (id)OR {
+    id expr = [self AND];
 
     while ([self match:[NSArray arrayWithObjects:@"OR"]]) {
         Token *operator = [self previous];
-        Expr *right = [self AND];
+        id right = [self AND];
         expr = [[Logical alloc] initWithLeft:expr operator:operator right:right];
     }
 
     return expr;
 }
 
-- (Expr *)AND {
-    Expr *expr = [self equality];
+- (id)AND {
+    id expr = [self equality];
 
     while ([self match:[NSArray arrayWithObjects:@"AND"]]) {
         Token *operator = [self previous];
-        Expr *right = [self equality];
+        id right = [self equality];
         expr = [[Logical alloc] initWithLeft:expr operator:operator right:right];
     }
 
     return expr;
 }
 
-- (Expr *)equality {
-    Expr *expr = [self comparison];
+- (id)equality {
+    id expr = [self comparison];
 
     while ([self match:[NSArray arrayWithObjects:@"BANG_EQ", @"IS_EQ"]]) {
         Token *operator = [self previous];
-        Expr *right = [self comparison];
+        id right = [self comparison];
         expr = [[Binary alloc] initWithLeft:expr operator:operator right:right];
     }
 
     return expr;
 }
 
-- (Expr *)comparison {
-    Expr *expr = [self term];
+- (id)comparison {
+    id expr = [self term];
 
     while ([self match:[NSArray arrayWithObjects:@"LT", @"LT_EQ", @"GR", @"GR_EQ"]]) {
         Token *operator = [self previous];
-        Expr *right = [self term];
+        id right = [self term];
         expr = [[Binary alloc] initWithLeft:expr operator:operator right:right];
     }
 
     return expr;
 }
 
-- (Expr *)term {
-    Expr *expr = [self factor];
+- (id)term {
+    id expr = [self factor];
 
     while ([self match:[NSArray arrayWithObjects:@"PLUS", @"MINUS"]]) {
         Token *operator = [self previous];
-        Expr *right = [self factor];
+        id right = [self factor];
         expr = [[Math alloc] initWithLeft:expr operator:operator right:right];
     }
 
     return expr;
 }
 
-- (Expr *)factor {
-    Expr *expr = [self unary];
+- (id)factor {
+    id expr = [self unary];
 
     while ([self match:[NSArray arrayWithObjects:@"STAR", @"SLASH"]]) {
         Token *operator = [self previous];
-        Expr *right = [self unary];
+        id right = [self unary];
         expr = [[Math alloc] initWithLeft:expr operator:operator right:right];
     }
 
     return expr;
 }
 
-- (Expr *)unary {
+- (id)unary {
     if ([self match:[NSArray arrayWithObjects:@"BANG"]]) {
         Token *operator = [self previous];
-        Expr *right = [self unary];
+        id right = [self unary];
         return [[Unary alloc] initWithOperator:operator right:right];
     }
 
     return [self primary];
 }
 
-- (Expr *)negate {
+- (id)negate {
     if ([self match:[NSArray arrayWithObjects:@"MINUS"]]) {
         Token *operator = [self previous];
-        Expr *right = [self unary];
+        id right = [self unary];
         return [[Negate alloc] initWithOperator:operator right:right];
     }
 
     return nil;
 }
 
-- (Expr *)primary {
+- (id)primary {
     if ([self match:[NSArray arrayWithObjects:@"FALSE"]]) {
         return [[Literal alloc] initWithValue:@"NO"];
     }
@@ -298,7 +298,7 @@
         return [[Variable alloc] initWithValue:[self previous]];
     }
     else if ([self match:[NSArray arrayWithObjects:@"L_PAREN"]]) {
-        Expr *expr = [self expression];
+        id expr = [self expression];
         [self consume:@"R_PAREN" message:@"Expect ')' after expression."];
         return [[Grouping alloc] initWithExpression:expr];
     }
