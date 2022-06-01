@@ -178,7 +178,7 @@
         id value = [self assignment];
 
         if ([expr isKindOfClass:[Variable class]]) {
-            Token *name = expr.name;
+            Token *name = [(Variable *)expr name];
             return [[Assign alloc] initWithName:name value:value];
         }
         else {
