@@ -13,6 +13,6 @@
 @property(nonatomic, readwrite) int line;
 
 - (instancetype)initWithData:(NSString *)type lexeme:(NSString *)lexeme literal:(NSString *)literal line:(int)line;
-- (NSString *)print;
+- (void)print;
 
 @end

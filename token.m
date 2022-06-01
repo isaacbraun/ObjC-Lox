@@ -18,8 +18,8 @@
     return self;
 }
 
-- (NSString *)print {
-    return @"%@ %@ %@", token_type, lexeme, literal;
+- (void)print {
+    NSLog(@"%@ %@ %@", token_type, lexeme, literal);
 }
 
 @end

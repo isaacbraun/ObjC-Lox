@@ -10,6 +10,7 @@
     {
         return [visitor performSelector:selector withObject:expr];
     }
+    return nil;
 }
 @end
 
@@ -18,7 +19,7 @@
 @synthesize value;
 
 - (instancetype)initWithName:(Token *)param_name value:(Expr *)param_value {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.name = param_name;
         self.value = param_value;
     }
@@ -33,7 +34,7 @@
 @synthesize right;
 
 - (instancetype)initWithLeft:(Expr *)param_left operator:(Token *)param_operator right:(Expr *)param_right {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.left = param_left;
         self.operator = param_operator;
         self.right = param_right;
@@ -49,7 +50,7 @@
 @synthesize right;
 
 - (instancetype)initWithLeft:(Expr *)param_left operator:(Token *)param_operator right:(Expr *)param_right {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.left = param_left;
         self.operator = param_operator;
         self.right = param_right;
@@ -63,7 +64,7 @@
 @synthesize expression;
 
 - (instancetype)initWithExpression:(Expr *)param_expression {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.expression = param_expression;
     }
     return self;
@@ -75,7 +76,7 @@
 @synthesize value;
 
 - (instancetype)initWithValue:(id)param_value {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.value = param_value;
     }
     return self;
@@ -89,7 +90,7 @@
 @synthesize right;
 
 - (instancetype)initWithLeft:(Expr *)param_left operator:(Token *)param_operator right:(Expr *)param_right {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.left = param_left;
         self.operator = param_operator;
         self.right = param_right;
@@ -104,7 +105,7 @@
 @synthesize right;
 
 - (instancetype)initWithOperator:(Token *)param_operator right:(Expr *)param_right {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.operator = param_operator;
         self.right = param_right;
     }
@@ -118,7 +119,7 @@
 @synthesize right;
 
 - (instancetype)initWithOperator:(Token *)param_operator right:(Expr *)param_right {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.operator = param_operator;
         self.right = param_right;
     }
@@ -131,7 +132,7 @@
 @synthesize name;
 
 - (instancetype)initWithName:(Token *)param_name {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.name = param_name;
     }
     return self;

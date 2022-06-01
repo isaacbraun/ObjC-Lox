@@ -8,7 +8,7 @@
 @synthesize enclosing;
 
 - (instancetype)initWithLox:(Lox *)param_lox andEnclosing:(Environment *)param_enclosing {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.values = [NSMutableDictionary dictionary];
         self.enclosing = param_enclosing;
         lox = param_lox;

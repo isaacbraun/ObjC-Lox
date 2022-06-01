@@ -6,7 +6,7 @@
 
 @implementation Parser
 - (instancetype)initWithTokens:(NSMutableArray *)param_tokens andLox:(Lox *)param_lox {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         tokens = param_tokens;
         current = 0;
         lox = param_lox;

@@ -7,7 +7,7 @@
 
 @implementation Interpreter
 - (instancetype)initWithLox:(Lox *)param_lox {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         environment = [[Environment alloc] initWithLox:param_lox andEnclosing:nil];
         lox = param_lox;
     }
@@ -53,6 +53,7 @@
     if (expr.operator.token_type == @"BANG") {
         return ![self isTruthy:right];
     }
+    return NO;
 }
 
 - (NSNumber *)visitNegate:(Negate *)expr {
@@ -60,6 +61,7 @@
     if (expr.operator.token_type == @"MINUS") {
         return [NSNumber numberWithDouble:-1 * [right doubleValue]];
     }
+    return nil;
 }
 
 - (NSString *)visitVariable:(Variable *)expr {
@@ -140,6 +142,9 @@
             return [NSNumber numberWithDouble:[left doubleValue] + [right doubleValue]];
         }
     }
+    else {
+        return nil;
+    }
 }
 
 - (BOOL)visitBinary:(Binary *)expr {
@@ -188,27 +193,38 @@
     else if (expr.operator.token_type == @"BANG_EQ") {
         return ![left isEqualTo:right];
     }
+    else {
+        return NO;
+    }
 }
 
 - (BOOL)checkNumberOperand:(Token *)operator operand:(Token *)operand {
     if ([operand.token_type isEqualToString:@"NUMBER"]) {
         return YES;
     }
-    [lox error:(NSNumber *)operator.line message:@"Operand must be a number."];
+    else {
+        [lox error:(NSNumber *)operator.line message:@"Operand must be a number."];
+        return NO;
+    }
 }
 
 - (BOOL)checkNumberOperands:(Token *)operator left:(Token *)left right:(Token *)right {
     if ([left.token_type isEqualToString:@"NUMBER"] && [right.token_type isEqualToString:@"NUMBER"]) {
         return YES;
     }
-    [lox error:(NSNumber *)operator.line message:@"Operands must be numbers."];
+    else {
+        [lox error:(NSNumber *)operator.line message:@"Operands must be numbers."];
+        return NO;
+    }
 }
 
 - (BOOL)checkStringOperands:(Token *)operator left:(Token *)left right:(Token *)right {
     if ([left.token_type isEqualToString:@"STRING"] && [right.token_type isEqualToString:@"STRING"]) {
         return YES;
     }
-    // [lox error:operator.line message:@"Operands must be strings."];
+    else {
+        return NO;
+    }
 }
 
 - (BOOL)isTruthy:(id)object {

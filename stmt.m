@@ -11,6 +11,9 @@
     {
         return [visitor performSelector:selector withObject:stmt];
     }
+    else {
+        return nil;
+    }
 }
 @end
 
@@ -18,7 +21,7 @@
 @synthesize statements;
 
 - (instancetype)initWithStatements:(NSMutableArray *)param_statements {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.statements = param_statements;
     }
     return self;
@@ -29,7 +32,7 @@
 @synthesize expression;
 
 - (instancetype)initWithExpression:(Expr *)param_expression {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.expression = param_expression;
     }
     return self;
@@ -42,7 +45,7 @@
 @synthesize elseBranch;
 
 - (instancetype)initWithCondition:(Expr *)param_condition thenBranch:(Stmt *)param_thenBranch elseBranch:(Stmt *)param_elseBranch {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.condition = param_condition;
         self.thenBranch = param_thenBranch;
         self.elseBranch = param_elseBranch;
@@ -55,7 +58,7 @@
 @synthesize expression;
 
 - (instancetype)initWithExpression:(Expr *)param_expression {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.expression = param_expression;
     }
     return self;
@@ -67,7 +70,7 @@
 @synthesize initializer;
 
 - (instancetype)initWithName:(Token *)param_name initializer:(Expr *)param_initializer {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.name = param_name;
         self.initializer = param_initializer;
     }
@@ -80,7 +83,7 @@
 @synthesize body;
 
 - (instancetype)initWithCondition:(Expr *)param_condition body:(Stmt *)param_body {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.condition = param_condition;
         self.body = param_body;
     }

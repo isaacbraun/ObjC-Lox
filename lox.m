@@ -110,7 +110,7 @@
 
 @end
 
-void main(int argc, const char * argv[]) {
+int main(int argc, const char * argv[]) {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]; 
     Lox *lox = [[Lox alloc] init];
 
@@ -128,4 +128,6 @@ void main(int argc, const char * argv[]) {
     }
 
     [pool drain];
+
+    return 0;
 }
