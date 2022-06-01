@@ -19,7 +19,7 @@
 }
 
 - (void)print {
-    NSLog(@"%@ %@ %@", token_type, lexeme, literal);
+    NSLog(@"Line: %d Type: %@ Lexeme: %@ Literal: %@", line, token_type, lexeme, literal);
 }
 
 @end

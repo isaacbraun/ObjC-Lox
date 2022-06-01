@@ -16,6 +16,7 @@
 }
 
 - (void)runFile:(NSString *)path {
+    NSLog(@"Running file %@\n", path);
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     if ([fileManager fileExistsAtPath:path] == YES) {
@@ -38,22 +39,17 @@
             // grab input from the command line and return it
             NSFileHandle *handle = [NSFileHandle fileHandleWithStandardInput];
             NSData *data = handle.availableData;
-            NSString *input = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+            NSString *input = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         
             [self run:input];
             hadError = NO;
         }
     }
     @catch(NSException *exception) {
-        // KeyboardInterrupt:
         NSLog(@"\nExited Plox");
         NSLog(@"%@ ", exception.name);
         NSLog(@"Reason: %@ ", exception.reason);
     }
-    // @catch(NSException *exception) {
-    //     // EOFError:
-    //     continue;
-    // }
 }
 
 - (void)run:(NSString *)source {
@@ -66,19 +62,20 @@
     if (sizeof(tokens) == 0) { return; }
 
     // UNCOMMENT for loop to test scanning - COMMENT OUT interpreter function call
-    // int i;
-    // for (i = 0; i < sizeof(tokens); i++ ) {
-    //     NSLog(@"Token[%d]: %d\n", i, tokens[i] );
+    // for (Token *token in tokens) {
+    //     [token print];
     // }
 
     Parser *parser = [[Parser alloc] initWithTokens:tokens andLox:self];
     NSMutableArray *statements = [parser parse];
+    NSLog(@"Statements: %@\n", statements);
 
     // Stop if there was a syntax error
     if (sizeof(statements) == 0) { return; }
 
     Interpreter *interpreter = [[Interpreter alloc] initWithLox:self];
     [interpreter interpret:statements];
+    NSLog(@"Interpreter Finished\n");
 
     [pool drain];
 }
@@ -87,7 +84,6 @@
     [self report:line where:@"" message:message];
 }
 
-// + (void)runtimeError:(Error *)error {
 - (void)runtimeError:(NSNumber *)line message:(NSString *)message {
     // NSLog(@"%@ \n[line %d]", [error getMessage], error.token.line);
     [self report:line where:@"" message:message];
@@ -104,7 +100,7 @@
 }
 
 - (void)report:(NSNumber *)line where:(NSString *)where message:(NSString *)message {
-    NSLog(@"[line %@] Error %@: %@", line, where, message);
+    NSLog(@"[line %@] Error %@: %@\n", line, where, message);
     hadError = YES;
 }
 
@@ -119,9 +115,7 @@ int main(int argc, const char * argv[]) {
         exit(64);
     }
     else if (argc == 2) {
-        // [lox runFile:argv[1]];
-        // [lox runFile:[NSString stringWithUTF8String:argv[1]]];
-        NSLog(@"argc: %d. argv[1]: %c", argc, argv[1]);
+        [lox runFile:[NSString stringWithUTF8String:argv[1]]];
     }
     else {
         [lox runPrompt];
