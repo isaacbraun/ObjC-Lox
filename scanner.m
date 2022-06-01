@@ -4,7 +4,7 @@
 
 @implementation Scanner
 
-- (instancetype)initWithSource:(NSString *)param_source andlox:(Lox *)param_lox {
+- (instancetype)initWithSource:(NSString *)param_source andLox:(Lox *)param_lox {
     self = [super init];
     if (self) {
         source = param_source;
@@ -17,7 +17,7 @@
     return self;
 }
 
-- (NSMutableDictionary)GetLiteralTokenTypes {
+- (NSMutableDictionary *)GetLiteralTokenTypes {
     NSMutableDictionary *LiteralTokenTypes = [NSMutableDictionary dictionary];
     [LiteralTokenTypes setObject: @"("  forKey: @"L_PAREN"];
     [LiteralTokenTypes setObject: @")"  forKey: @"R_PAREN"];
@@ -41,7 +41,7 @@
     return LiteralTokenTypes;
 }
 
-- (NSMutableDictionary)GetKeywordTokenTypes {
+- (NSMutableDictionary *)GetKeywordTokenTypes {
     NSMutableDictionary *KeywordTokenTypes = [NSMutableDictionary dictionary];
     [KeywordTokenTypes setObject: @"AND" forKey: @"and"];
     [KeywordTokenTypes setObject: @"CLASS" forKey: @"class"];
@@ -85,7 +85,7 @@
     }
     // Handle SLASH with check for a comment
     else if (c == '/') {
-        if [self match:@"/"] {
+        if ([self match:'/']) {
             while (![self isAtEnd] && [self peek] != '\n') {
                 [self advance];
             }
@@ -131,7 +131,7 @@
         }
         // Error if not a literal or alpha
         else {
-            [lox error:line message:[NSString stringWithFormat:@"Unexpected character %c", c]];
+            [lox error:(NSNumber *)line message:[NSString stringWithFormat:@"Unexpected character %c", c]];
         }
     }
 }
@@ -159,7 +159,7 @@
     }
 
     if ([self isAtEnd]) {
-        [lox error:line message:@"Unterminated string"];
+        [lox error:(NSNumber *)line message:@"Unterminated string"];
     }
 
     [self advance];
@@ -174,7 +174,7 @@
     }
 
     // Look for fractional part
-    if ([self peek:'.'] == '.' && [self isDigit:[self peekNext]]) {
+    if ([self peek] == '.' && [self isDigit:[self peekNext]]) {
         // Consume the "."
         [self advance];
 
@@ -237,3 +237,5 @@
     Token *token = [[Token alloc] initWithData:tempType lexeme:text literal:literal line:line];
     [tokens addObject:token];
 }
+
+@end
