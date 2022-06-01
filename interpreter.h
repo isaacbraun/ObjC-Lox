@@ -6,11 +6,12 @@
 
 @interface Interpreter : NSObject {
     Environment *environment;
+    NSMutableArray *statements;
     Lox *lox;
 }
 
-- (instancetype)initWithLox:(Lox *)param_lox;
-- (void)interpret:(NSMutableArray *)statements;
+- (instancetype)initWithStatements:(NSMutableArray *)param_statements andLox:(Lox *)param_lox;
+- (void)interpret;
 - (NSString *)visitLiteral:(Literal *)expr;
 - (id)visitLogical:(Logical *)expr;
 - (BOOL)visitUnary:(Unary *)expr;
@@ -30,10 +31,9 @@
 - (BOOL)checkNumberOperands:(Token *)operator left:(Token *)left right:(Token *)right;
 - (BOOL)checkStringOperands:(Token *)operator left:(Token *)left right:(Token *)right;
 - (BOOL)isTruthy:(id)object;
-// - (BOOL)isEqual:(id)a b:(id)b;
 - (NSString *)stringify:(id)object;
-- (id)evaluate:(Expr *)expr;
-- (void)execute:(Stmt *)stmt;
+- (id)evaluate:(id)expr;
+- (void)execute:(id)stmt;
 - (void)executeBlock:(NSMutableArray *)statements withEnvironment:(Environment *)param_environment;
 
 @end

@@ -35,12 +35,12 @@
 - (void)runPrompt {
     @try {
         while YES {
-            NSLog(@"> ");
             // grab input from the command line and return it
+            NSLog(@"> ");
             NSFileHandle *handle = [NSFileHandle fileHandleWithStandardInput];
             NSData *data = handle.availableData;
             NSString *input = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        
+            
             [self run:input];
             hadError = NO;
         }
@@ -68,14 +68,12 @@
 
     Parser *parser = [[Parser alloc] initWithTokens:tokens andLox:self];
     NSMutableArray *statements = [parser parse];
-    NSLog(@"Statements: %@\n", statements);
 
     // Stop if there was a syntax error
     if (sizeof(statements) == 0) { return; }
 
-    Interpreter *interpreter = [[Interpreter alloc] initWithLox:self];
-    [interpreter interpret:statements];
-    NSLog(@"Interpreter Finished\n");
+    Interpreter *interpreter = [[Interpreter alloc] initWithStatements:statements andLox:self];
+    [interpreter interpret];
 
     [pool drain];
 }

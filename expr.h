@@ -2,7 +2,6 @@
 #import "token.h"
 
 @interface Expr : NSObject
-+ (id)accept:(id)expr vistor:(id)visitor;
 @end
 
 

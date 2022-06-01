@@ -6,20 +6,20 @@
 #import "environment.h"
 
 @implementation Interpreter
-- (instancetype)initWithLox:(Lox *)param_lox {
+- (instancetype)initWithStatements:(NSMutableArray *)param_statements andLox:(Lox *)param_lox {
     if ((self = [super init])) {
         environment = [[Environment alloc] initWithLox:param_lox andEnclosing:nil];
+        statements = param_statements;
         lox = param_lox;
     }
     return self;
     
 }
 
-- (void)interpret:(NSMutableArray *)statements {
+- (void)interpret {
     @try {
         for (Stmt *stmt in statements) {
             [self execute:stmt];
-            
         }
     }
     @catch (NSException *exception) {
@@ -35,7 +35,7 @@
 
 - (id)visitLogical:(Logical *)expr {
     id left = [self evaluate:expr.left];
-    if (expr.operator.token_type == @"OR") {
+    if ([expr.operator.token_type isEqualToString:@"OR"]) {
         if ([self isTruthy:left]) {
             return left;
         }
@@ -50,7 +50,7 @@
 
 - (BOOL)visitUnary:(Unary *)expr {
     id right = [self evaluate:expr.right];
-    if (expr.operator.token_type == @"BANG") {
+    if ([expr.operator.token_type isEqualToString:@"BANG"]) {
         return ![self isTruthy:right];
     }
     return NO;
@@ -58,7 +58,7 @@
 
 - (NSNumber *)visitNegate:(Negate *)expr {
     id right = [self evaluate:expr.right];
-    if (expr.operator.token_type == @"MINUS") {
+    if ([expr.operator.token_type isEqualToString:@"MINUS"]) {
         return [NSNumber numberWithDouble:-1 * [right doubleValue]];
     }
     return nil;
@@ -101,7 +101,6 @@
     if (stmt.initializer != nil) {
         value = [self evaluate:stmt.initializer];
     }
-
     [environment define:stmt.name.lexeme value:value];
 }
 
@@ -121,19 +120,19 @@
     id left = [self evaluate:expr.left];
     id right = [self evaluate:expr.right];
 
-    if (expr.operator.token_type == @"MINUS") {
+    if ([expr.operator.token_type isEqualToString:@"MINUS"]) {
         [self checkNumberOperands:expr.operator left:left right:right];
         return [NSNumber numberWithDouble:[left doubleValue] - [right doubleValue]];
     }
-    else if (expr.operator.token_type == @"SLASH") {
+    else if ([expr.operator.token_type isEqualToString:@"SLASH"]) {
         [self checkNumberOperands:expr.operator left:left right:right];
         return [NSNumber numberWithDouble:[left doubleValue] / [right doubleValue]];
     }
-    else if (expr.operator.token_type == @"STAR") {
+    else if ([expr.operator.token_type isEqualToString:@"STAR"]) {
         [self checkNumberOperands:expr.operator left:left right:right];
         return [NSNumber numberWithDouble:[left doubleValue] * [right doubleValue]];
     }
-    else if (expr.operator.token_type == @"PLUS") {
+    else if ([expr.operator.token_type isEqualToString:@"PLUS"]) {
         if ([self checkStringOperands:expr.operator left:left right:right]) {
             return [left stringByAppendingString:right];
         }
@@ -151,7 +150,7 @@
     id left = [self evaluate:expr.left];
     id right = [self evaluate:expr.right];
 
-    if (expr.operator.token_type == @"GR") {
+    if ([expr.operator.token_type isEqualToString:@"GR"]) {
         if ([self checkStringOperands:expr.operator left:left right:right]) {
             return [left isGreaterThan:right];
         }
@@ -160,7 +159,7 @@
             return [left doubleValue] > [right doubleValue];
         }
     }
-    else if (expr.operator.token_type == @"GR_EQ") {
+    else if ([expr.operator.token_type isEqualToString:@"GR_EQ"]) {
         if ([self checkStringOperands:expr.operator left:left right:right]) {
             return [left isGreaterThanOrEqualTo:right];
         }
@@ -169,7 +168,7 @@
             return [left doubleValue] >= [right doubleValue];
         }
     }
-    else if (expr.operator.token_type == @"LT") {
+    else if ([expr.operator.token_type isEqualToString:@"LT"]) {
         if ([self checkStringOperands:expr.operator left:left right:right]) {
             return [left isLessThan:right];
         }
@@ -178,7 +177,7 @@
             return [left doubleValue] < [right doubleValue];
         }
     }
-    else if (expr.operator.token_type == @"LT_EQ") {
+    else if ([expr.operator.token_type isEqualToString:@"LT_EQ"]) {
         if ([self checkStringOperands:expr.operator left:left right:right]) {
             return [left isLessThanOrEqualTo:right];
         }
@@ -187,10 +186,10 @@
             return [left doubleValue] <= [right doubleValue];
         }
     }
-    else if (expr.operator.token_type == @"IS_EQ") {
+    else if ([expr.operator.token_type isEqualToString:@"IS_EQ"]) {
         return [left isEqualTo:right];
     }
-    else if (expr.operator.token_type == @"BANG_EQ") {
+    else if ([expr.operator.token_type isEqualToString:@"BANG_EQ"]) {
         return ![left isEqualTo:right];
     }
     else {
@@ -228,7 +227,7 @@
 }
 
 - (BOOL)isTruthy:(id)object {
-    if (object == nil || object == @"nil" || object == @"false") {
+    if (object == nil || [object isEqualToString:@"nil"] || [object isEqualToString:@"false"]) {
         return NO;
     }
     // if (object == @"true" || object == @"1" || object == @(1)) {
@@ -236,8 +235,6 @@
     // }
     return YES;
 }
-
-// - (BOOL)isEqual:(id)a b:(id)b
 
 - (NSString *)stringify:(id)object {
     if (object == nil) {
@@ -255,22 +252,36 @@
 
     NSString *output = [NSString stringWithFormat:@"%@", object];
 
-    if (output == @"YES") {
+    if ([output isEqualToString:@"YES"]) {
         return @"true";
     }
-    else if (output == @"NO") {
+    else if ([output isEqualToString:@"NO"]) {
         return @"false";
     }
 
-    return nil;
+    return output;
 }
 
-- (id)evaluate:(Expr *)expr {
-    return [expr accept:expr visitor:self];
+- (id)evaluate:(id)expr {
+    NSString *methodName = [NSString stringWithFormat:@"visit%@:", [expr class]];
+    SEL selector = NSSelectorFromString(methodName);
+
+    if ([self respondsToSelector:selector]) {
+        return [self performSelector:selector withObject:expr];
+    }
+    else {
+        NSLog(@"Invalid Expression");
+        return nil;
+    }
 }
 
-- (void)execute:(Stmt *)stmt {
-    [stmt accept:stmt visitor:self];
+- (void)execute:(id)stmt {
+    NSString *methodName = [NSString stringWithFormat:@"visit%@:", [stmt class]];
+    SEL selector = NSSelectorFromString(methodName);
+
+    if ([self respondsToSelector:selector]) {
+        [self performSelector:selector withObject:stmt];
+    }
 }
 
 - (void)executeBlock:(NSMutableArray *)statements withEnvironment:(Environment *)param_environment {

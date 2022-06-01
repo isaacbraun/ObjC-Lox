@@ -2,16 +2,6 @@
 #import "token.h"
 
 @implementation Expr
-+ (id)accept:(id)expr vistor:(id)visitor {
-    // https://stackoverflow.com/questions/9366079/visitor-pattern-in-objective-c
-    NSString *methodName = [NSString stringWithFormat:@"visit%@:", [expr class]];
-    SEL selector = NSSelectorFromString(methodName);
-    if ([visitor respondsToSelector:selector])
-    {
-        return [visitor performSelector:selector withObject:expr];
-    }
-    return nil;
-}
 @end
 
 @implementation Assign

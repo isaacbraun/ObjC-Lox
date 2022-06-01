@@ -3,18 +3,6 @@
 #import "token.h"
 
 @implementation Stmt
-+ (id)accept:(id)stmt vistor:(id)visitor {
-    // https://stackoverflow.com/questions/9366079/visitor-pattern-in-objective-c
-    NSString *methodName = [NSString stringWithFormat:@"visit%@:", [stmt class]];
-    SEL selector = NSSelectorFromString(methodName);
-    if ([visitor respondsToSelector:selector])
-    {
-        return [visitor performSelector:selector withObject:stmt];
-    }
-    else {
-        return nil;
-    }
-}
 @end
 
 @implementation Block

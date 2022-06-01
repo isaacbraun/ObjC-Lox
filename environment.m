@@ -17,11 +17,11 @@
 }
 
 - (void)define:(NSString *)name value:(id)value {
-    [self.values setObject:value  forKey:name];
+    [self.values setObject:value forKey:name];
 }
 
 - (id)get:(Token *)name {
-    id value = [self.values objectForKey:name.lexeme];
+    id value = [self.values objectForKey:name.lexeme];;
     if (value != nil) {
         return value;
     }

@@ -124,9 +124,8 @@
 
 - (id)varDeclaration {
     Token *name = [self consume:@"IDENTIFIER" message:@"Expect variable name."];
-
-    Expr *initializer = nil;
-    if ([self match:[NSArray arrayWithObjects:@"EQUAL", nil]]) {
+    id initializer = nil;
+    if ([self match:[NSArray arrayWithObjects:@"EQ", nil]]) {
         initializer = [self expression];
     }
 
@@ -144,7 +143,6 @@
 }
 
 - (id)printStatement {
-    NSLog(@"In print statement\n");
     Expr *value = [self expression];
     [self consume:@"SEMICOLON" message:@"Expect ';' after value."];
     return [[Print alloc] initWithExpression:value];
@@ -296,7 +294,7 @@
         return [[Literal alloc] initWithValue:[NSString stringWithFormat:@"%@", [self previous].literal]];
     }
     else if ([self match:[NSArray arrayWithObjects:@"IDENTIFIER", nil]]) {
-        return [[Variable alloc] initWithValue:[self previous]];
+        return [[Variable alloc] initWithName:[self previous]];
     }
     else if ([self match:[NSArray arrayWithObjects:@"L_PAREN", nil]]) {
         id expr = [self expression];
@@ -334,7 +332,7 @@
     if ([self isAtEnd]) {
         return NO;
     }
-    NSLog(@"Checking %@ against %@: %@", [self peek].token_type, type, [[self peek].token_type isEqualToString:type] ? @"YES" : @"NO");
+    // NSLog(@"Checking %@ against %@: %@", [self peek].token_type, type, [[self peek].token_type isEqualToString:type] ? @"YES" : @"NO");
 
     return [[self peek].token_type isEqualToString:type];
 }
